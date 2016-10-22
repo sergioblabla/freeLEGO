@@ -1,0 +1,239 @@
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include "Peca.h"
+#include "Bibliotecas/Objeto3D.h"
+
+PecinhaAux PecaLego;
+
+//variaveis rodar eixo da camea
+int rodarx = 0; //roda no eixo x
+int rodary = 0; //roda no eixo y
+int rodarz = 0; //roda no eixo z
+
+//outras variaveis
+int rodaPeca=0;
+int tamanho = 10; //zoom
+int j, k; //auxiliares
+int RP = 1; //modo proporcao real do tamanho dos planetas
+int pause=0; //pausar
+int ilum=0;
+
+GLfloat ambiente[] = {1, 1, 1, 0.5};
+
+GLfloat luz_posicao[]={15.0,15.0,10.0,0.0};
+GLfloat luz_difusa[]={1, 1, 0.5,1};
+GLfloat luz_especular[]={0,0.05,0.2,1};
+
+GLfloat mat_ambiente[]={0.5,0.0,0.5,1};
+GLfloat mat_difusa[]={0.1,0.7,0.5,1};
+GLfloat mat_especular[]={0,0,0.5,1};
+
+//funcao camera eixo x e y
+void camera(GLint botao, GLint x, GLint y){
+    if(botao == GLUT_KEY_UP) {
+           //if (rotTabuleiro > -35)
+           rodarx += - 5;
+           
+    }
+    if(botao == GLUT_KEY_DOWN) {
+           //if (rotTabuleiro < 50)
+           rodarx += 5;
+    }
+    if(botao == GLUT_KEY_LEFT) {
+           rodary += - 5;
+           
+    }
+    if(botao == GLUT_KEY_RIGHT) {
+           rodary += 5;
+    }
+
+    glutPostRedisplay();
+}
+
+static void key(unsigned char tecla, int x, int y)
+{
+    switch (tecla) 
+    {
+	case 'r': //ativar ou desativar modo proporcao correta de tamanhos
+            if(RP==0)
+            RP=1;
+            else
+            RP=0;
+            break;
+        case 's': //resetar angulo da camera e modo apocalipse
+            rodary=180;
+	    rodarz=0;
+            rodarx=0;
+            j=0;
+            k=0;
+            break;
+    case 'l':
+        if(ilum==0){
+        glEnable(GL_LIGHTING);
+        glEnable(GL_LIGHT0);
+        //glEnable(GL_SMOOTH);
+        ilum=1;
+        }
+        else{
+        glDisable(GL_LIGHTING);
+        glDisable(GL_LIGHT0);
+        //glDisable(GL_SMOOTH);
+        ilum=0;
+        }
+    break;
+        case 'm': //rotacao extra como opcao a da funcao especial das setas do teclado
+            rodary+=10;
+            break;
+	case 'n': //rotacao contraria extra como opcao a da funcao especial das setas do teclado
+            rodary-=10;
+            break;
+        case 'k': //rotacao em z 
+            rodarz+=10;
+            break;
+	case 'j': //rotacao em z
+            rodarz-=10;
+            break;
+        case 'e':
+            j=1;
+            k=0;
+            break;
+	case 'd':
+            k=1;
+            j=0;
+            break;
+        case 'b':
+            k=1;
+            j=1;
+            break;
+        case 'z': //ativar zBuffer
+            glEnable(GL_DEPTH_TEST);
+            break;
+        case 'Z': //desativar zBuffer
+            glDisable(GL_DEPTH_TEST);
+            break;
+        case '+': //ampliar zoom
+            tamanho+=1;
+            break;
+        case '-': //reduzir zoom
+            tamanho-=1;
+            break;
+	case 'p': //pausar
+            if(pause==0)
+            pause=1;
+            else
+            pause=0;
+            break;
+        case 'q': //sair
+            exit(0);
+            break;
+        case 'g': //pausar
+            if(rodaPeca==0)
+            rodaPeca=1;
+            else
+            rodaPeca=0;
+            break;
+    }
+
+    glutPostRedisplay();
+}
+
+void luzes()
+{
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_difusa);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, luz_especular);
+    glLightfv(GL_LIGHT0, GL_POSITION, luz_posicao);
+    
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambiente);
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);
+}
+
+void Desenhar(){
+    /*//usa como velocidade uma divisao relativa a hora atual e armazena em constante
+    const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
+    const double a = t*90.0;*/
+
+    //glColorMask(1,1,1,1);
+    glClearColor(0,0,0,0); //Cor de fundo (preto)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
+
+    glEnable(GL_DEPTH_TEST); //ativa zBuffer
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(-800,800,-800,800,-1500,1500);   
+    	
+    //glRotated(rodary,0,1,0);
+
+    glRotated(rodarz+180,0,0,1);
+    glRotated(rodarx, 1, 0, 0);
+    glRotated(rodary, 0, 1, 0);
+
+    glScaled(tamanho,tamanho,tamanho); //zoom
+
+    luzes(); //permite função luz
+
+    GLfloat mat_ambiente1[]={0.5,0.0,0.5,1};
+    GLfloat mat_difusa1[]={0.67,0.61,0,1};
+    GLfloat mat_especular1[]={1.5699,0.9599,0.5,1};
+
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente1);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa1);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular1);
+
+    glColor3d(1,0,0);
+    //glutWireTeapot(10);
+    printf("\n Programa Iniciado!");
+    novaPeca(&PecaLego, 1, 0, 1, 2);
+    printf("\n OOOOOOOOOOOOKKKKKKKKKKKKKKKKK!");
+    
+    //imprimirPeca(&PecaLego);
+/*
+    alteraPosicaoMPeca(&PecaLego, 2, 5, 4);
+    
+    int array[3] = {0,0,0};
+    pegaPosicaoPeca(&PecaLego, array);
+    
+    printf("\nPosicao retornada era (%d, %d, %d)!", array[0], array[1], array[2]);
+    
+    rotacionaPeca(&PecaLego, rodaPeca);
+    
+    printf("\nTamanho da Peca era %d!", pegaComprimentoPeca(&PecaLego));
+    
+    alteraTransladoPeca(&PecaLego, 1, 8, 9);*/
+    
+    /*int x=1, y=1, z=1;
+    moverSeta(&Cursor, x, y, z);
+    
+    moverPeca(&Cursor, x, y, z);*/
+
+    glutSwapBuffers();  //revesamento entre os buffers de tras e o da frente
+}
+
+int main(int argc, char** argv)
+{
+    
+    glutInit(&argc,argv);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+    glutInitWindowSize(400,400);
+    
+    glutCreateWindow("Testa Peça");
+
+    glutDisplayFunc(Desenhar);
+    glutKeyboardFunc(key);
+    //glutSpecialFunc(camera);
+
+    glutMainLoop();
+
+}
