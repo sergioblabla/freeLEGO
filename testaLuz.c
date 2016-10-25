@@ -22,7 +22,7 @@ double t = 0;
 double a = 0;
 
 //Variaveis de menu
-int menu = 0; //0-bem vindo, 1-menu principal, 2-jogar, 3-ajuda, 4-creditos, 5-sair
+int menu = 2; //0-bem vindo, 1-menu principal, 2-jogar, 3-ajuda, 4-creditos, 5-sair
 int opcao = 0;
 int someseta=0; //teste sumir com ponteiro
 
@@ -30,15 +30,23 @@ int someseta=0; //teste sumir com ponteiro
 int jogocomecou = 0;
 
 //variavel de luz
-GLfloat ambiente[] = {1, 1, 1, 0.5};
+GLfloat ambiente[] = {0.2, 0.2, 0.2, 1};
 
-GLfloat luz_posicao[]={800.0,800.0,800.0,0.0};
-GLfloat luz_difusa[]={1, 1, 0.5,1};
+GLfloat luz_posicao[]={800.0,1000.0,2000.0,0.0};
+GLfloat luz_difusa[]={0.7, 0.7, 0.7,1};
+GLfloat luz_especular[]={1,1,1,1};
+
+GLfloat mat_ambiente[]={1,1,0.5,1};
+GLfloat mat_difusa[]={0.1,0.7,0.5,1};
+GLfloat mat_especular[]={1,1,0.5,1};
+
+/*GLfloat luz_posicao[]={800.0,1000.0,2000.0,0.0};
+GLfloat luz_difusa[]={0, 1, 0.5,1};
 GLfloat luz_especular[]={0,0.05,0.2,1};
 
 GLfloat mat_ambiente[]={0.5,0.0,0.5,1};
 GLfloat mat_difusa[]={0.1,0.7,0.5,1};
-GLfloat mat_especular[]={0,0,0.5,1};
+GLfloat mat_especular[]={0,0,0.5,1};*/
 
 //objetos
 Objeto3D terreno; //terreno
@@ -125,7 +133,7 @@ void key(unsigned char key, int x, int y)
 	case '6':
             if(opcao==0 && menu==1){
 	    menu=2;
-    	    LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
+    	    
 	    }
 	    if(opcao==1 && menu==1)
 	    menu=3;
@@ -473,86 +481,27 @@ static void rato(int botao, int estado, int x, int y){
         //MinhasPecas[blocotipo0]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	//MinhasPecas[blocotipo0]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 
+
+
+void luzes()
+{
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_difusa);
+    glLightfv(GL_LIGHT0, GL_SPECULAR, luz_especular);
+    glLightfv(GL_LIGHT0, GL_POSITION, luz_posicao);
+    
+    glLightModelfv(GL_LIGHT_MODEL_AMBIENT, ambiente);
+    
+    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente);
+    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);
+}
+
 void Desenhar(){
     //usa como velocidade uma divisao relativa a hora atual e armazena em constante
     /*const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     const double a = t*90.0;*/
-    switch (menu) {
-    case 0: //primeira tela ao abrir jogo
-    glPushMatrix();	//desempilha
-    LoadGLTextures("Imagens/bemvindo.bmp");				// Load The Texture(s) 
-    glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
-    glClearColor(0, 0, 0, 0);			// Limpa a cor de fundo para preto 
-    glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
-    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
     
-    glColor3d(1,1,1); // Cor do desenho (branco)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
-    
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    gluOrtho2D(-50,50,-50,50); 
-    glMatrixMode(GL_MODELVIEW);
-
-    glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
-
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
-    glEnd();
-    break;
-    case 1: 
-    /*                                                     */
-    /*            M E N U    P R I N C I P A L             */
-    /*                                                     */
-
-	switch(opcao){
-    	case 0:
-		LoadGLTextures("Imagens/mp1.bmp");				// Load The Texture(s)
-		break;
-    	case 1:
-		LoadGLTextures("Imagens/mp2.bmp");				// Load The Texture(s)
-		break;
-    	case 2:
-		LoadGLTextures("Imagens/mp3.bmp");				// Load The Texture(s)
-		break;
-    	case 3:
-		LoadGLTextures("Imagens/mp4.bmp");				// Load The Texture(s)
-		break;
-	}
-
-	glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
-    	glClearColor(0, 0, 1, 0);			// Limpa a cor de fundo para azul 
-    	glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    	glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
-    	glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-    	glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
-    
-    	glColor3d(1,1,1); // Cor do desenho (branco)
-    	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
-    
-    	glViewport(0,0,width,height);
-
-    	glMatrixMode(GL_PROJECTION);
-    	glLoadIdentity();
-    	gluOrtho2D(-50,50,-50,50); 
-    	glMatrixMode(GL_MODELVIEW);
-
-    	glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
-
-    	glBegin(GL_QUADS);
-    		glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
-    		glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
-    		glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
-    		glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
-    	glEnd();
-    glPopMatrix();	//desempilha
-	break; //fim do menu principal
-    case 2:
+    LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
     /*                                                     */
     /*                   J   O   G    O                    */
     /*                                                     */
@@ -613,7 +562,11 @@ void Desenhar(){
     /* TERRENO           */
     /* TAMANHO 8X8       */
     glPushMatrix();	//empilha
-    glColor3d(0,1,0);
+        	glEnable(GL_LIGHTING);
+        	glEnable(GL_LIGHT0);
+
+    luzes(); //permite função luz
+    glColor3f(0,1,0);
     glRotated(180,1,0,0);
     glTranslated(0, 1, 0);
     imprimir(terreno);
@@ -726,70 +679,12 @@ void Desenhar(){
     glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
     glEnd();
 
+
+
     glPopMatrix();	//desempilha
 
     glutSwapBuffers();
-    break;
-    case 3:
-    glPushMatrix();	//empilha
-    LoadGLTextures("Imagens/legopc2.bmp");				// Load The Texture(s) 
-    glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
-    glClearColor(0, 1, 0, 0);			// Limpa a cor de fundo para verde 
-    glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
-    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
     
-    glColor3d(1,1,1); // Cor do desenho (branco)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
-    
-    glViewport(0,0,800,500);
-    glMatrixMode(GL_PROJECTION);
-    	glLoadIdentity();
-    gluOrtho2D(-50,50,-50,50); 
-    glMatrixMode(GL_MODELVIEW);
-
-    glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
-
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
-    glEnd();    
-    glPopMatrix();	//desempilha
-    break;
-    case 4:
-    glPushMatrix();	//desempilha
-    LoadGLTextures("Imagens/legopc3.bmp");				// Load The Texture(s) 
-    glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
-    glClearColor(1, 0, 0, 0);			// Limpa a cor de fundo para vermelho 
-    glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
-    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
-    
-    glColor3d(1,1,1); // Cor do desenho (branco)
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
-    
-    glViewport(0,0,width,height);
-    glMatrixMode(GL_PROJECTION);
-    	glLoadIdentity();
-    gluOrtho2D(-50,50,-50,50); 
-    glMatrixMode(GL_MODELVIEW);
-
-    glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
-
-    glBegin(GL_QUADS);
-    glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
-    glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
-    glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
-    glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
-    glEnd();
-    glPopMatrix();	//desempilha
-    break;
- }
-glutSwapBuffers();
 }
 
 void GerenciaPecas(){ //IMPRIME AS PEÇAS QUE DEVEM SER EXIBIDAS
@@ -895,6 +790,7 @@ int main(int argc, char** argv)
     glutKeyboardFunc(key);
 
     glutIdleFunc(relogio);
+
     glutDisplayFunc(Desenhar);
 
     glutMouseFunc(rato);

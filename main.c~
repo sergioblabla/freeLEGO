@@ -649,7 +649,7 @@ void Desenhar(){
 
     /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
 
-/*
+
 	// Habilita o modelo de colorização de Gouraud
 	glShadeModel(GL_SMOOTH);
 
@@ -684,7 +684,7 @@ void Desenhar(){
 	glEnable(GL_LIGHT0);
 	// Habilita o depth-buffering
 	glEnable(GL_DEPTH_TEST);
-*/
+
     GerenciaPecas();
 
     jogocomecou=jogocomecou+1;
