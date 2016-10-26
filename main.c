@@ -589,8 +589,11 @@ void Desenhar(){
     glLoadIdentity();
     //glFrustum(-800,800,-800,800,100,1500);
     //glFrustum(-10,10,-10,10,1,100);
-
-    glOrtho(-800,800,-800,800,-1500,1500); 
+    //glOrtho(-800,800,-800,800,-1500,1500); 
+    // Ativa Projeção Perspectiva
+    gluPerspective(90, 0.75, 10, 1600);
+    //Posiciona a Câmera
+    gluLookAt(0,160,200, 0,0,0, 0,1,0);
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
 

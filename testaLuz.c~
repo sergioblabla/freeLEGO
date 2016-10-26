@@ -17,6 +17,7 @@ int rodarz = 0; //roda no eixo z
 float posCursor[3] = {0,0,0}; //[0] para x, [1] para y e [2] para z
 
 //outras variaveis
+double auxfovy, auxAspect, auxZNear, auxZFar;
 int tamanho = 10; //zoom
 double t = 0;
 double a = 0;
@@ -30,15 +31,15 @@ int someseta=0; //teste sumir com ponteiro
 int jogocomecou = 0;
 
 //variavel de luz
-GLfloat ambiente[] = {0.2, 0.2, 0.2, 1};
+/*GLfloat ambiente[] = {0.2, 0.2, 0.2, 1};
 
-GLfloat luz_posicao[]={800.0,1000.0,2000.0,0.0};
+GLfloat luz_posicao[]={800.0,1000.0,2000.0,1};
 GLfloat luz_difusa[]={0.7, 0.7, 0.7,1};
 GLfloat luz_especular[]={1,1,1,1};
 
 GLfloat mat_ambiente[]={1,1,0.5,1};
 GLfloat mat_difusa[]={0.1,0.7,0.5,1};
-GLfloat mat_especular[]={0,0,0.5,1};
+GLfloat mat_especular[]={1,1,0.5,1};*/
 
 /*GLfloat luz_posicao[]={800.0,1000.0,2000.0,0.0};
 GLfloat luz_difusa[]={0, 1, 0.5,1};
@@ -122,7 +123,7 @@ void key(unsigned char key, int x, int y)
             if(menu==0)
 	    menu=1;
             break;
-        case '8':
+        /*case '8':
             if(opcao>0 && opcao<4 && menu==1)
 	    opcao--;
             break;
@@ -145,7 +146,7 @@ void key(unsigned char key, int x, int y)
 	case '4':
             if(menu>1)
 	    menu=1;
-            break;
+            break;*/
         case 'a': //ampliar zoom
             tamanho+=1;
             break;
@@ -265,6 +266,30 @@ void key(unsigned char key, int x, int y)
             break;
 	case 'Q': //sair
             exit(0);
+            break;
+	case '/':
+            auxfovy--;
+            break;
+	case '*':
+            auxfovy++;
+            break;
+	case '8':
+            auxAspect-=0.05;
+            break;
+	case '9':
+            auxAspect+=0.05;
+            break;
+	case '5':
+            auxZNear--;
+            break;
+	case '6':
+            auxZNear++;
+            break;
+	case '2':
+            auxZFar-=100;
+            break;
+	case '3':
+            auxZFar+=100;
             break;
 	/*case 'z': //soltar peca
             if(seguraPeca==1){
@@ -485,7 +510,45 @@ static void rato(int botao, int estado, int x, int y){
 
 void luzes()
 {
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_difusa);
+	GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
+	GLfloat luzDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
+	GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
+	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
+
+	// Capacidade de brilho do material
+	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
+	GLint especMaterial = 60;
+
+ 	// Especifica que a cor de fundo da janela será preta
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	// Habilita o modelo de colorização de Gouraud
+	glShadeModel(GL_SMOOTH);
+
+	// Define a refletância do material 
+	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
+	// Define a concentração do brilho
+	glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
+
+	// Ativa o uso da luz ambiente 
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
+
+	// Define os parâmetros da luz de número 0
+	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
+	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular );
+	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
+
+	// Habilita a definição da cor do material a partir da cor corrente
+	glEnable(GL_COLOR_MATERIAL);
+	//Habilita o uso de iluminação
+	glEnable(GL_LIGHTING);  
+	// Habilita a luz de número 0
+	glEnable(GL_LIGHT0);
+	// Habilita o depth-buffering
+	glEnable(GL_DEPTH_TEST);
+
+    /*glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_difusa);
     glLightfv(GL_LIGHT0, GL_SPECULAR, luz_especular);
     glLightfv(GL_LIGHT0, GL_POSITION, luz_posicao);
     
@@ -493,7 +556,7 @@ void luzes()
     
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);*/
 }
 
 void Desenhar(){
@@ -501,7 +564,7 @@ void Desenhar(){
     /*const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     const double a = t*90.0;*/
     
-    LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
+    //LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
     /*                                                     */
     /*                   J   O   G    O                    */
     /*                                                     */
@@ -511,23 +574,23 @@ void Desenhar(){
     /**********************************************************
     *                   Iluminacao                            *
     ***********************************************************/
-    GLfloat mat_ambiente1[]={0.5,0.0,0.5,1};
+    /*GLfloat mat_ambiente1[]={0.5,0.0,0.5,1};
     GLfloat mat_difusa1[]={0.67,0.61,0,1};
     GLfloat mat_especular1[]={1.5699,0.9599,0.5,1};
 
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente1);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa1);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular1);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular1);*/
 
     //Fim
 
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_TEXTURE_2D);			// Enable Texture Mapping
     glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    //glDisable(GL_DEPTH_TEST);			// Enables Depth Testing
+    glDisable(GL_DEPTH_TEST);			// Enables Depth Testing
     glClearColor(0,0,0,0); //Cor de fundo (preto)
     glColor3d(0,0,0); // Cor do desenho (preto)
-    glClear(GL_COLOR_BUFFER_BIT); //Limpar buffer de cor
+    //glClear(GL_COLOR_BUFFER_BIT); //Limpar buffer de cor
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -538,8 +601,12 @@ void Desenhar(){
     glLoadIdentity();
     //glFrustum(-800,800,-800,800,100,1500);
     //glFrustum(-10,10,-10,10,1,100);
+	
+	gluPerspective(auxfovy,auxAspect,auxZNear,auxZFar);
 
-    glOrtho(-800,800,-800,800,-1500,1500); 
+	gluLookAt(0,160,200, 0,0,0, 0,1,0);
+	//gluPerspective(90,0.75,10,1600);
+    //glOrtho(-800,800,-800,800,-1500,1500); 
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
 
@@ -559,13 +626,14 @@ void Desenhar(){
     glScaled(tamanho,tamanho,tamanho); //zoom
 
 
+
+    luzes(); //permite função luz
     /* TERRENO           */
     /* TAMANHO 8X8       */
     glPushMatrix();	//empilha
-        	glEnable(GL_LIGHTING);
-        	glEnable(GL_LIGHT0);
+      /*  	glEnable(GL_LIGHTING);
+        	glEnable(GL_LIGHT0);*/
 
-    luzes(); //permite função luz
     glColor3f(0,1,0);
     glRotated(180,1,0,0);
     glTranslated(0, 1, 0);
@@ -574,7 +642,6 @@ void Desenhar(){
 
     /* |Fim| TERRENO     */
     /* |Fim| TAMANHO 8X8 */
-
 
 
     /* CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
@@ -602,9 +669,9 @@ void Desenhar(){
 
     /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
 
-/*
+
 	// Habilita o modelo de colorização de Gouraud
-	glShadeModel(GL_SMOOTH);
+/*	glShadeModel(GL_SMOOTH);
 
 	// Capacidade de brilho do material
 	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
@@ -627,17 +694,17 @@ void Desenhar(){
 	glLightfv(GL_LIGHT0, GL_AMBIENT, lAmbiente); 
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lDifusa );
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lEspecular );
-	glLightfv(GL_LIGHT0, GL_POSITION, lposicao );
+	glLightfv(GL_LIGHT0, GL_POSITION, lposicao );*/
 
 	// Habilita a definição da cor do material a partir da cor corrente
 	glEnable(GL_COLOR_MATERIAL);
 	//Habilita o uso de iluminação
-	glEnable(GL_LIGHTING);  
+	/*glEnable(GL_LIGHTING);  
 	// Habilita a luz de número 0
 	glEnable(GL_LIGHT0);
 	// Habilita o depth-buffering
-	glEnable(GL_DEPTH_TEST);
-*/
+	glEnable(GL_DEPTH_TEST);*/
+
     GerenciaPecas();
 
     jogocomecou=jogocomecou+1;
@@ -656,11 +723,11 @@ void Desenhar(){
     glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
     //glClearColor(1, 0, 0, 0);			// Limpa a cor de fundo para vermelho 
     //glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
-    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
+    //glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
+    //glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
+    //glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
     
-    glColor3d(1,1,1); // Cor do desenho (branco)
+    glColor3d(0,0,1); // Cor do desenho (branco)
     glClear(GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
     
     
@@ -680,10 +747,11 @@ void Desenhar(){
     glEnd();
 
 
-
     glPopMatrix();	//desempilha
 
     glutSwapBuffers();
+
+	printf("Valores Atuais: Fovy=%f, Aspect=%f, ZNear=%f, ZFar=%f.\n", auxfovy,auxAspect,auxZNear,auxZFar);
     
 }
 
@@ -777,7 +845,11 @@ void carregaMatrizPecas(){
 
 int main(int argc, char** argv)
 {
-   
+   auxfovy = 90; 
+   auxAspect = 0.75;
+   auxZNear = 10;
+   auxZFar = 1600;
+
     glutInit(&argc,argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH);
     glutInitWindowSize(800,500);
@@ -794,7 +866,7 @@ int main(int argc, char** argv)
     glutDisplayFunc(Desenhar);
 
     glutMouseFunc(rato);
-
+    //luzes();
     glutMainLoop();
 
 }
