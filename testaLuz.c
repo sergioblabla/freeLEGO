@@ -521,7 +521,250 @@ void luzes()
     glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);
 }
 
-void Desenhar(){
+void luzes2()
+{
+
+	// Luz Ambiente	
+	GLfloat lAmbiente[4]={0.2,0.2,0.2,1.0}; 
+
+	GLfloat lDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
+	GLfloat lEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
+	GLfloat lposicao[4]={160+5*rodarx, 0+5*rodary, 400+5*rodarz, 1.0};
+	//GLfloat lposicao[4]={0.0, 50.0, 50.0, 1.0};
+
+	// Capacidade de brilho do material
+	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
+	GLint especMaterial = 60;
+
+ 	// Especifica que a cor de fundo da janela será preta
+	//glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	
+	// Habilita o modelo de colorização de Gouraud
+	glShadeModel(GL_SMOOTH);
+
+	// Define a refletância do material 
+	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
+	// Define a concentração do brilho
+	glMateriali(GL_FRONT,GL_SHININESS, especMaterial);
+
+	// Ativa o uso da luz ambiente 
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lAmbiente);
+
+	// Define os parâmetros da luz de número 0
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lAmbiente); 
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lDifusa );
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lEspecular );
+	glLightfv(GL_LIGHT0, GL_POSITION, lposicao );
+
+	// Habilita a definição da cor do material a partir da cor corrente
+	glEnable(GL_COLOR_MATERIAL);
+	//Habilita o uso de iluminação
+	glEnable(GL_LIGHTING);  
+	// Habilita a luz de número 0
+	glEnable(GL_LIGHT0);
+	// Habilita o depth-buffering
+	glEnable(GL_DEPTH_TEST);
+}
+
+void Desenhar()
+{
+
+    /*                                                     */
+    /*                   J   O   G    O                    */
+    /*                                                     */
+
+	// Limpa a janela e o depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+/*
+    glPushMatrix();	//empilha
+	
+    glEnable(GL_DEPTH_TEST);
+    glDisable(GL_TEXTURE_2D);			// Enable Texture Mapping
+    glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
+    //glDisable(GL_DEPTH_TEST);			// Enables Depth Testing
+    glClearColor(0,0,0,0); //Cor de fundo (preto)
+    glColor3d(0,0,0); // Cor do desenho (preto)
+    glClear(GL_COLOR_BUFFER_BIT); //Limpar buffer de cor
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+*/
+    glViewport(0,0,width*0.75,height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+
+    gluPerspective(auxfovy,auxAspect,auxZNear,auxZFar);
+
+    gluLookAt(0,160,200, 0,0,0, 0,1,0);
+
+    /*
+    glEnable(GL_DEPTH_TEST); //ativa zBuffer
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();*/
+
+    glRotated(rodarz,0,0,1);
+    glRotatef(rodarx, 1, 0, 0);
+    glRotatef(rodary, 0, 1, 0);
+
+    //predefinicoes de conforto inicial na camera
+    glRotated(40,1,0,0);
+    glRotated(40,0,1,0);
+
+    glScaled(tamanho,tamanho,tamanho); //zoom
+
+glBegin(GL_POLYGON);
+ 
+glVertex3f( -5, -5, -5);       // P1
+glVertex3f( -5,  5, -5);       // P2
+glVertex3f(  5,  5, -5);       // P3
+glVertex3f(  5, -5, -5);       // P4
+ 
+glEnd();
+
+
+glVertex3f( -5, 5, -5);       // P1
+glVertex3f( -5, -5, -5);       // P2
+glVertex3f(  5, -5, -5);       // P3
+glVertex3f(  5, 5, -5);       // P4
+ 
+glEnd();
+
+glBegin(GL_POLYGON);
+ 
+glVertex3f( 5, 5, 5);       // P1
+glVertex3f( 5,  -5, 5);       // P2
+glVertex3f(  -5,  -5, 5);       // P3
+glVertex3f(  -5, 5, 5);       // P4
+ 
+glEnd();
+
+	luzes2(); //permite função luz
+
+    /* TERRENO           */
+    /* TAMANHO 8X8       */
+    glPushMatrix();	//empilha
+    glColor3f(0,1,0);
+    glRotated(180,1,0,0);
+    glTranslated(0, 1, 0);
+    imprimir(terreno);
+    glPopMatrix();	//desempilha
+
+    /* |Fim| TERRENO     */
+    /* |Fim| TAMANHO 8X8 */
+
+
+    /* CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
+    if(someseta==0){ //modo esconder/mostrar seletor
+    	glRotated(180,1,0,0);
+    	if(jogocomecou==0){
+    	glTranslated(-7, 0, 7);
+    	glPushMatrix();	//empilha
+        	glColor3f(0.85,0.6,0);
+        	glRotated(a, 0, 1, 0);
+		glutSolidTeapot(-1.0f);
+		imprimir(Seta);
+    	glPopMatrix();	//desempilha
+    	}else{
+    		if(moverSeta(&cursor, posCursor[0], posCursor[1], posCursor[2])==1){
+    		glTranslated(-7, 0, 7);
+    		glPushMatrix();	//empilha
+        		glColor3f(0.85,0.6,0);
+        		glTranslatef(posCursor[0]*2, posCursor[1]*2, posCursor[2]*2);
+        		glRotated(a, 0, 1, 0);
+			glutSolidTeapot(-1.0f);
+			imprimir(Seta);
+    		glPopMatrix();	//desempilha
+    		}
+    	}
+    }
+
+
+
+    /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
+
+
+
+    GerenciaPecas();
+
+    jogocomecou=jogocomecou+1;
+    /*glPopMatrix();	//desempilha
+
+    glDrawBuffer(GL_BACK); //buffer de tras
+
+    glPushMatrix();	//empilha
+    glViewport(width*0.75,0,width*0.25,height);
+
+    glMatrixMode(GL_PROJECTION);
+    	glLoadIdentity();
+    gluOrtho2D(-50,50,-50,50); 
+    glMatrixMode(GL_MODELVIEW);
+    
+    glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
+    //glClearColor(1, 0, 0, 0);			// Limpa a cor de fundo para vermelho 
+    //glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
+    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
+    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
+    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
+    
+    glColor3d(1,1,1); // Cor do desenho (branco)
+    glClear(GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
+    
+    
+    glLoadIdentity();
+    glMatrixMode(GL_PROJECTION);
+    //glOrtho(-50.0, 50.0, -50.0, 50.0, -50.0, 50.0);
+    //glMatrixMode(GL_MODELVIEW);
+
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
+    glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
+    glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
+    glEnd();*/
+
+
+
+    glPopMatrix();	//desempilha
+
+    glutSwapBuffers();
+
+	printf("Valores Atuais: Fovy=%f, Aspect=%f, ZNear=%f, ZFar=%f.\n", auxfovy,auxAspect,auxZNear,auxZFar);
+    
+}
+
+void Desenhar3()
+{
+	// Limpa a janela e o depth buffer
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	
+    glViewport(0,0,width*0.75,height);
+
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+
+
+    gluPerspective(auxfovy,auxAspect,auxZNear,auxZFar);
+
+    gluLookAt(0,160,200, 0,0,0, 0,1,0);
+
+    glColor3f(0.0f, 0.0f, 1.0f);
+
+	// Desenha o teapot com a cor corrente (solid)
+	glutSolidTeapot(50.0f);
+
+	luzes2();
+
+	glutSwapBuffers();
+}
+
+void Desenhar2(){
     //usa como velocidade uma divisao relativa a hora atual e armazena em constante
     /*const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     const double a = t*90.0;*/
@@ -591,10 +834,6 @@ void Desenhar(){
     /* TERRENO           */
     /* TAMANHO 8X8       */
     glPushMatrix();	//empilha
-        	glEnable(GL_LIGHTING);
-        	glEnable(GL_LIGHT0);
-
-    luzes(); //permite função luz
     glColor3f(0,1,0);
     glRotated(180,1,0,0);
     glTranslated(0, 1, 0);
@@ -605,6 +844,12 @@ void Desenhar(){
     /* |Fim| TAMANHO 8X8 */
 
 
+	glutSolidTeapot(4.0f);
+
+        	glEnable(GL_LIGHTING);
+        	glEnable(GL_LIGHT0);
+
+    luzes(); //permite função luz
 
     /* CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
     if(someseta==0){ //modo esconder/mostrar seletor
@@ -629,11 +874,12 @@ void Desenhar(){
     	}
     }
 
+
     /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
 
 
 	// Habilita o modelo de colorização de Gouraud
-	glShadeModel(GL_SMOOTH);
+	//glShadeModel(GL_SMOOTH);
 /*
 	// Capacidade de brilho do material
 	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
@@ -670,7 +916,7 @@ void Desenhar(){
     GerenciaPecas();
 
     jogocomecou=jogocomecou+1;
-    glPopMatrix();	//desempilha
+/*    glPopMatrix();	//desempilha
 
     glDrawBuffer(GL_BACK); //buffer de tras
 
@@ -695,8 +941,8 @@ void Desenhar(){
     
     glLoadIdentity();
     glMatrixMode(GL_PROJECTION);
-    /*glOrtho(-50.0, 50.0, -50.0, 50.0, -50.0, 50.0);
-    glMatrixMode(GL_MODELVIEW);*/
+    //glOrtho(-50.0, 50.0, -50.0, 50.0, -50.0, 50.0);
+    //glMatrixMode(GL_MODELVIEW);
 
 
     glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
@@ -706,7 +952,7 @@ void Desenhar(){
     glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
     glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
     glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
-    glEnd();
+    glEnd();*/
 
 
 

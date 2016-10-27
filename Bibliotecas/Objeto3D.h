@@ -145,10 +145,18 @@ void imprimir(Objeto3D objeto3D) {
 
     glBegin(GL_QUADS);
     while(q) {
-        glTexCoord2f(0, 0); glVertex3f(q->p1.x, q->p1.y, q->p1.z);
-        glTexCoord2f(0, 1); glVertex3f(q->p2.x, q->p2.y, q->p2.z);
-        glTexCoord2f(1, 1); glVertex3f(q->p3.x, q->p3.y, q->p3.z);
-        glTexCoord2f(1, 0); glVertex3f(q->p4.x, q->p4.y, q->p4.z);
+        glTexCoord2f(0, 0);
+		glNormal3f(q->p1.x, q->p1.y, q->p1.z); 
+			glVertex3f(q->p1.x, q->p1.y, q->p1.z);
+        glTexCoord2f(0, 1);
+		//glNormal3f(q->p2.x, q->p2.y, q->p2.z); 
+			glVertex3f(q->p2.x, q->p2.y, q->p2.z);
+        glTexCoord2f(1, 1);
+		//glNormal3f(q->p3.x, q->p3.y, q->p3.z); 
+			glVertex3f(q->p3.x, q->p3.y, q->p3.z);
+        glTexCoord2f(1, 0); 
+		//glNormal3f(q->p4.x, q->p4.y, q->p4.z); 
+			glVertex3f(q->p4.x, q->p4.y, q->p4.z);
 
         q = q->prox;
     }
