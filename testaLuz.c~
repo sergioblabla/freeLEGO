@@ -605,6 +605,8 @@ void Desenhar(){
 	gluPerspective(auxfovy,auxAspect,auxZNear,auxZFar);
 
 	gluLookAt(0,160,200, 0,0,0, 0,1,0);
+
+    luzes(); //permite função luz
 	//gluPerspective(90,0.75,10,1600);
     //glOrtho(-800,800,-800,800,-1500,1500); 
 
@@ -626,8 +628,6 @@ void Desenhar(){
     glScaled(tamanho,tamanho,tamanho); //zoom
 
 
-
-    luzes(); //permite função luz
     /* TERRENO           */
     /* TAMANHO 8X8       */
     glPushMatrix();	//empilha

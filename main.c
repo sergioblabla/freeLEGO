@@ -139,16 +139,20 @@ void key(unsigned char key, int x, int y)
 	    menu=1;
             break;
         case 'a': //ampliar zoom
-            tamanho+=1;
+	    if(tamanho < 61)
+                tamanho+=1;
             break;
         case 'A': //ampliar zoom
-            tamanho+=1;
+	    if(tamanho < 61)
+                tamanho+=1;
             break;
         case 'd': //reduzir zoom
-            tamanho-=1;
+	    if(tamanho > 1)
+                tamanho-=1;
             break;
         case 'D': //reduzir zoom
-            tamanho-=1;
+	    if(tamanho > 1)
+                tamanho-=1;
             break;
 	case 'm': //rotacao extra como opcao a da funcao especial das setas do teclado
             rodary+=10;

@@ -31,7 +31,7 @@ int someseta=0; //teste sumir com ponteiro
 int jogocomecou = 0;
 
 //variavel de luz
-/*GLfloat ambiente[] = {0.2, 0.2, 0.2, 1};
+GLfloat ambiente[] = {0.2, 0.2, 0.2, 1};
 
 GLfloat luz_posicao[]={800.0,1000.0,2000.0,1};
 GLfloat luz_difusa[]={0.7, 0.7, 0.7,1};
@@ -39,7 +39,7 @@ GLfloat luz_especular[]={1,1,1,1};
 
 GLfloat mat_ambiente[]={1,1,0.5,1};
 GLfloat mat_difusa[]={0.1,0.7,0.5,1};
-GLfloat mat_especular[]={1,1,0.5,1};*/
+GLfloat mat_especular[]={1,1,0.5,1};
 
 /*GLfloat luz_posicao[]={800.0,1000.0,2000.0,0.0};
 GLfloat luz_difusa[]={0, 1, 0.5,1};
@@ -510,45 +510,7 @@ static void rato(int botao, int estado, int x, int y){
 
 void luzes()
 {
-	GLfloat luzAmbiente[4]={0.2,0.2,0.2,1.0}; 
-	GLfloat luzDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
-	GLfloat luzEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
-	GLfloat posicaoLuz[4]={0.0, 50.0, 50.0, 1.0};
-
-	// Capacidade de brilho do material
-	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
-	GLint especMaterial = 60;
-
- 	// Especifica que a cor de fundo da janela será preta
-	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-	
-	// Habilita o modelo de colorização de Gouraud
-	glShadeModel(GL_SMOOTH);
-
-	// Define a refletância do material 
-	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
-	// Define a concentração do brilho
-	glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
-
-	// Ativa o uso da luz ambiente 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, luzAmbiente);
-
-	// Define os parâmetros da luz de número 0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, luzAmbiente); 
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, luzDifusa );
-	glLightfv(GL_LIGHT0, GL_SPECULAR, luzEspecular );
-	glLightfv(GL_LIGHT0, GL_POSITION, posicaoLuz );
-
-	// Habilita a definição da cor do material a partir da cor corrente
-	glEnable(GL_COLOR_MATERIAL);
-	//Habilita o uso de iluminação
-	glEnable(GL_LIGHTING);  
-	// Habilita a luz de número 0
-	glEnable(GL_LIGHT0);
-	// Habilita o depth-buffering
-	glEnable(GL_DEPTH_TEST);
-
-    /*glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_difusa);
+    glLightfv(GL_LIGHT0, GL_DIFFUSE, luz_difusa);
     glLightfv(GL_LIGHT0, GL_SPECULAR, luz_especular);
     glLightfv(GL_LIGHT0, GL_POSITION, luz_posicao);
     
@@ -556,7 +518,7 @@ void luzes()
     
     glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente);
     glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);*/
+    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular);
 }
 
 void Desenhar(){
@@ -587,10 +549,10 @@ void Desenhar(){
     glEnable(GL_DEPTH_TEST);
     glDisable(GL_TEXTURE_2D);			// Enable Texture Mapping
     glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    glDisable(GL_DEPTH_TEST);			// Enables Depth Testing
+    //glDisable(GL_DEPTH_TEST);			// Enables Depth Testing
     glClearColor(0,0,0,0); //Cor de fundo (preto)
     glColor3d(0,0,0); // Cor do desenho (preto)
-    //glClear(GL_COLOR_BUFFER_BIT); //Limpar buffer de cor
+    glClear(GL_COLOR_BUFFER_BIT); //Limpar buffer de cor
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -605,8 +567,6 @@ void Desenhar(){
 	gluPerspective(auxfovy,auxAspect,auxZNear,auxZFar);
 
 	gluLookAt(0,160,200, 0,0,0, 0,1,0);
-
-    luzes(); //permite função luz
 	//gluPerspective(90,0.75,10,1600);
     //glOrtho(-800,800,-800,800,-1500,1500); 
 
@@ -631,9 +591,10 @@ void Desenhar(){
     /* TERRENO           */
     /* TAMANHO 8X8       */
     glPushMatrix();	//empilha
-      /*  	glEnable(GL_LIGHTING);
-        	glEnable(GL_LIGHT0);*/
+        	glEnable(GL_LIGHTING);
+        	glEnable(GL_LIGHT0);
 
+    luzes(); //permite função luz
     glColor3f(0,1,0);
     glRotated(180,1,0,0);
     glTranslated(0, 1, 0);
@@ -642,6 +603,7 @@ void Desenhar(){
 
     /* |Fim| TERRENO     */
     /* |Fim| TAMANHO 8X8 */
+
 
 
     /* CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
@@ -671,8 +633,8 @@ void Desenhar(){
 
 
 	// Habilita o modelo de colorização de Gouraud
-/*	glShadeModel(GL_SMOOTH);
-
+	glShadeModel(GL_SMOOTH);
+/*
 	// Capacidade de brilho do material
 	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
 	GLint especMaterial = 60;
@@ -723,11 +685,11 @@ void Desenhar(){
     glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
     //glClearColor(1, 0, 0, 0);			// Limpa a cor de fundo para vermelho 
     //glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
-    //glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
-    //glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
-    //glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
+    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
+    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
+    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
     
-    glColor3d(0,0,1); // Cor do desenho (branco)
+    glColor3d(1,1,1); // Cor do desenho (branco)
     glClear(GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
     
     
@@ -745,6 +707,7 @@ void Desenhar(){
     glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
     glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
     glEnd();
+
 
 
     glPopMatrix();	//desempilha
@@ -866,7 +829,7 @@ int main(int argc, char** argv)
     glutDisplayFunc(Desenhar);
 
     glutMouseFunc(rato);
-    //luzes();
+
     glutMainLoop();
 
 }
