@@ -622,30 +622,27 @@ void Desenhar()
 
 	luzes2(); //permite função luz
 
+/* Planos de Depuração */
 glBegin(GL_POLYGON);
- 
-glVertex3f( -5, -5, -5);       // P1
-glVertex3f( -5,  5, -5);       // P2
-glVertex3f(  5,  5, -5);       // P3
-glVertex3f(  5, -5, -5);       // P4
- 
-glEnd();
-
-
-glVertex3f( -5, 5, -5);       // P1
-glVertex3f( -5, -5, -5);       // P2
-glVertex3f(  5, -5, -5);       // P3
-glVertex3f(  5, 5, -5);       // P4
- 
+	glNormal3f(-5, -5, -5); 
+		glVertex3f( -5, -5, -5);       // P1
+	glNormal3f( -5,  5, -5); 
+		glVertex3f( -5,  5, -5);       // P2
+	glNormal3f( 5,  5, -5); 
+		glVertex3f(  5,  5, -5);       // P3
+	glNormal3f( 5, -5, -5); 
+		glVertex3f(  5, -5, -5);       // P4
 glEnd();
 
 glBegin(GL_POLYGON);
- 
-glVertex3f( 5, 5, 5);       // P1
-glVertex3f( 5,  -5, 5);       // P2
-glVertex3f(  -5,  -5, 5);       // P3
-glVertex3f(  -5, 5, 5);       // P4
- 
+	glNormal3f( 5, 5, 5);  
+		glVertex3f( 5, 5, 5);       // P1
+	glNormal3f( 5,  -5, 5);  
+		glVertex3f( 5,  -5, 5);       // P2
+	glNormal3f(  -5,  -5, 5);  
+		glVertex3f(  -5,  -5, 5);       // P3
+	glNormal3f(  -5, 5, 5);  
+		glVertex3f(  -5, 5, 5);       // P4
 glEnd();
 
     /* TERRENO           */
