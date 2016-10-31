@@ -529,7 +529,10 @@ void luzes2()
 
 	GLfloat lDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
 	GLfloat lEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
-	GLfloat lposicao[4]={160+5*rodarx, 0+5*rodary, 400+5*rodarz, 1.0};
+	//GLfloat lposicao[4]={160, 0, 900, 1.0};
+	//GLfloat lposicao[4]={160+5*rodarx, 0+5*rodary, 400+5*rodarz, 1.0};
+	GLfloat lposicao[4]={-460, -500, 400, 1.0};
+	//GLfloat lposicao[4]={260+5*rodarx, 500+5*rodary, 400+5*rodarz, 1.0};
 	//GLfloat lposicao[4]={0.0, 50.0, 50.0, 1.0};
 
 	// Capacidade de brilho do material
@@ -555,6 +558,7 @@ void luzes2()
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, lDifusa );
 	glLightfv(GL_LIGHT0, GL_SPECULAR, lEspecular );
 	glLightfv(GL_LIGHT0, GL_POSITION, lposicao );
+	//glLightfv(GL_LIGHT0, GL_POSITION, lposicao2 );
 
 	// Habilita a definição da cor do material a partir da cor corrente
 	glEnable(GL_COLOR_MATERIAL);
@@ -615,6 +619,9 @@ void Desenhar()
 
     glScaled(tamanho,tamanho,tamanho); //zoom
 
+
+	luzes2(); //permite função luz
+
 glBegin(GL_POLYGON);
  
 glVertex3f( -5, -5, -5);       // P1
@@ -640,8 +647,6 @@ glVertex3f(  -5,  -5, 5);       // P3
 glVertex3f(  -5, 5, 5);       // P4
  
 glEnd();
-
-	luzes2(); //permite função luz
 
     /* TERRENO           */
     /* TAMANHO 8X8       */
@@ -734,7 +739,9 @@ glEnd();
 
     glutSwapBuffers();
 
-	printf("Valores Atuais: Fovy=%f, Aspect=%f, ZNear=%f, ZFar=%f.\n", auxfovy,auxAspect,auxZNear,auxZFar);
+	//printf("Valores Atuais: Fovy=%f, Aspect=%f, ZNear=%f, ZFar=%f.\n", auxfovy,auxAspect,auxZNear,auxZFar);
+	printf("Valores Atuais: LuzPosX=%d, LuzPosY=%d, LuzPosZ=%d\n", 160+5*rodarx, 0+5*rodary, 400+5*rodarz);
+
     
 }
 

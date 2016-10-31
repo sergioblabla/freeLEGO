@@ -1,6 +1,7 @@
 #ifndef OBJETO3D_H
 #define OBJETO3D_H
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/gl.h>
@@ -31,10 +32,21 @@ struct objeto3D {
     struct faceQ *q; // Aponta para o início da lista de faces quadriláteras
 };
 
+float calculaNorma(float x, float y, float z);
 void carregar(Objeto3D *,char *);
 void imprimir(Objeto3D);
 void inserir_faceT(FaceT **, Ponto, Ponto, Ponto);
 void inserir_faceQ(FaceQ **, Ponto, Ponto, Ponto, Ponto);
+
+/* Calcula a norma de um vetor a partir de 3 coordenadas*/
+float calculaNorma(float x, float y, float z)
+{
+    int i;
+    float norma = 0;
+    norma = x*x + y*y + z*z;
+
+   return sqrt(norma);
+}
 
 /* Preenche as informações de um Objeto3D com os dados presentes no arquivo */
 void carregar(Objeto3D *objeto3D, char *arquivo) {
@@ -132,12 +144,20 @@ void imprimir(Objeto3D objeto3D) {
 
     FaceT *t = objeto3D.t;
     FaceQ *q = objeto3D.q;
+    
+    float auxNorma = 0;
 
     glBegin(GL_TRIANGLES);
     while(t) {
-        glVertex3f(t->p1.x, t->p1.y, t->p1.z);
-        glVertex3f(t->p2.x, t->p2.y, t->p2.z);
-        glVertex3f(t->p3.x, t->p3.y, t->p3.z);
+	auxNorma = calculaNorma(t->p1.x, t->p1.y, t->p1.z);
+		glNormal3f(t->p1.x/auxNorma, t->p1.y/auxNorma, t->p1.z/auxNorma); 
+        		glVertex3f(t->p1.x, t->p1.y, t->p1.z);
+	auxNorma = calculaNorma(t->p2.x, t->p2.y, t->p2.z);
+		glNormal3f(t->p2.x/auxNorma, t->p2.y/auxNorma, t->p2.z/auxNorma); 
+        		glVertex3f(t->p2.x, t->p2.y, t->p2.z);
+	auxNorma = calculaNorma(t->p3.x, t->p3.y, t->p3.z);
+		glNormal3f(t->p3.x/auxNorma, t->p3.y/auxNorma, t->p3.z/auxNorma); 
+        		glVertex3f(t->p3.x, t->p3.y, t->p3.z);
 
         t = t->prox;
     }
@@ -146,16 +166,20 @@ void imprimir(Objeto3D objeto3D) {
     glBegin(GL_QUADS);
     while(q) {
         glTexCoord2f(0, 0);
-		glNormal3f(q->p1.x, q->p1.y, q->p1.z); 
+		/*auxNorma = calculaNorma(q->p1.x, q->p1.y, q->p1.z);
+		glNormal3f(q->p1.x/auxNorma, q->p1.y/auxNorma, q->p1.z/auxNorma); */
 			glVertex3f(q->p1.x, q->p1.y, q->p1.z);
         glTexCoord2f(0, 1);
-		//glNormal3f(q->p2.x, q->p2.y, q->p2.z); 
+		/*auxNorma = calculaNorma(q->p2.x, q->p2.y, q->p2.z);
+		glNormal3f(q->p2.x/auxNorma, q->p2.y/auxNorma, q->p2.z/auxNorma); */
 			glVertex3f(q->p2.x, q->p2.y, q->p2.z);
         glTexCoord2f(1, 1);
-		//glNormal3f(q->p3.x, q->p3.y, q->p3.z); 
+		/*auxNorma = calculaNorma(q->p3.x, q->p3.y, q->p3.z);
+		glNormal3f(q->p3.x/auxNorma, q->p3.y/auxNorma, q->p3.z/auxNorma); */
 			glVertex3f(q->p3.x, q->p3.y, q->p3.z);
         glTexCoord2f(1, 0); 
-		//glNormal3f(q->p4.x, q->p4.y, q->p4.z); 
+		/*auxNorma = calculaNorma(q->p4.x, q->p4.y, q->p4.z);
+		glNormal3f(q->p4.x/auxNorma, q->p4.y/auxNorma, q->p4.z/auxNorma); */
 			glVertex3f(q->p4.x, q->p4.y, q->p4.z);
 
         q = q->prox;

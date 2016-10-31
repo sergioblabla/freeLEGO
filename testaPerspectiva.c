@@ -564,7 +564,7 @@ void Desenhar(){
     /*const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     const double a = t*90.0;*/
     
-    //LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
+    LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
     /*                                                     */
     /*                   J   O   G    O                    */
     /*                                                     */
