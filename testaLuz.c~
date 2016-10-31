@@ -573,6 +573,7 @@ void luzes2()
 void Desenhar()
 {
 
+    	    LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
     /*                                                     */
     /*                   J   O   G    O                    */
     /*                                                     */
@@ -635,16 +636,14 @@ glBegin(GL_POLYGON);
 glEnd();
 
 glBegin(GL_POLYGON);
-
 	glNormal3f( 5, 5, 5);  
-glVertex3f( 5, 5, 5);       // P1
+		glVertex3f( 5, 5, 5);       // P1
 	glNormal3f( 5,  -5, 5);  
-glVertex3f( 5,  -5, 5);       // P2
+		glVertex3f( 5,  -5, 5);       // P2
 	glNormal3f(  -5,  -5, 5);  
-glVertex3f(  -5,  -5, 5);       // P3
+		glVertex3f(  -5,  -5, 5);       // P3
 	glNormal3f(  -5, 5, 5);  
-glVertex3f(  -5, 5, 5);       // P4
- 
+		glVertex3f(  -5, 5, 5);       // P4
 glEnd();
 
     /* TERRENO           */
@@ -694,10 +693,9 @@ glEnd();
     GerenciaPecas();
 
     jogocomecou=jogocomecou+1;
-    /*glPopMatrix();	//desempilha
+    glPopMatrix();	//desempilha
 
     glDrawBuffer(GL_BACK); //buffer de tras
-
     glPushMatrix();	//empilha
     glViewport(width*0.75,0,width*0.25,height);
 
@@ -730,7 +728,7 @@ glEnd();
     glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
     glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
     glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
-    glEnd();*/
+    glEnd();
 
 
 

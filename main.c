@@ -481,6 +481,7 @@ void Desenhar(){
     //usa como velocidade uma divisao relativa a hora atual e armazena em constante
     /*const double t = glutGet(GLUT_ELAPSED_TIME) / 1000.0;
     const double a = t*90.0;*/
+
     switch (menu) {
     case 0: //primeira tela ao abrir jogo
     glPushMatrix();	//desempilha
@@ -530,7 +531,7 @@ void Desenhar(){
 	}
 
 	glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
-    	glClearColor(0, 0, 1, 0);			// Limpa a cor de fundo para azul 
+    	glClearColor(0, 0, 0, 0);			// Limpa a cor de fundo para preto 
     	glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
     	glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
     	glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
@@ -545,6 +546,10 @@ void Desenhar(){
     	glLoadIdentity();
     	gluOrtho2D(-50,50,-50,50); 
     	glMatrixMode(GL_MODELVIEW);
+
+	// Luz Ambiente	
+	GLfloat ambiente[4]={1.0,1.0,1.0,1.0}; 
+	glLightfv(GL_LIGHT0, GL_AMBIENT, ambiente); 
 
     	glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
 
@@ -561,31 +566,63 @@ void Desenhar(){
     /*                   J   O   G    O                    */
     /*                                                     */
 
+
     glPushMatrix();	//empilha
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
+    glClearColor(0,0,0,0); //Cor de fundo (preto)
+    glColor3d(0,0,0); // Cor do desenho (preto)
 
     /**********************************************************
     *                   Iluminacao                            *
     ***********************************************************/
-    GLfloat mat_ambiente1[]={0.5,0.0,0.5,1};
-    GLfloat mat_difusa1[]={0.67,0.61,0,1};
-    GLfloat mat_especular1[]={1.5699,0.9599,0.5,1};
+	// Luz Ambiente	
+	GLfloat lAmbiente[4]={0.2,0.2,0.2,1.0}; 
 
-    glMaterialfv(GL_FRONT, GL_AMBIENT, mat_ambiente1);
-    glMaterialfv(GL_FRONT, GL_DIFFUSE, mat_difusa1);
-    glMaterialfv(GL_FRONT, GL_SPECULAR, mat_especular1);
+	GLfloat lDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
+	GLfloat lEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
+	GLfloat lposicao[4]={-460, -500, 400, 1.0};
+
+	// Capacidade de brilho do material
+	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
+	GLint especMaterial = 60;
+
+	// Habilita o modelo de colorização de Gouraud
+	glShadeModel(GL_SMOOTH);
+
+	// Define a refletância do material 
+	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
+	// Define a concentração do brilho
+	glMateriali(GL_FRONT,GL_SHININESS, especMaterial);
+
+	// Ativa o uso da luz ambiente 
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lAmbiente);
+
+	// Define os parâmetros da luz de número 0
+	glLightfv(GL_LIGHT0, GL_AMBIENT, lAmbiente); 
+	glLightfv(GL_LIGHT0, GL_DIFFUSE, lDifusa );
+	glLightfv(GL_LIGHT0, GL_SPECULAR, lEspecular );
+	glLightfv(GL_LIGHT0, GL_POSITION, lposicao );
+
+	// Habilita a definição da cor do material a partir da cor corrente
+	glEnable(GL_COLOR_MATERIAL);
+	//Habilita o uso de iluminação
+	glEnable(GL_LIGHTING);  
+	// Habilita a luz de número 0
+	glEnable(GL_LIGHT0);
+	// Habilita o depth-buffering
+	glEnable(GL_DEPTH_TEST); //ativa zBuffer
 
     //Fim
-
-    glEnable(GL_DEPTH_TEST);
+/*
+    //glEnable(GL_DEPTH_TEST);
     glDisable(GL_TEXTURE_2D);			// Enable Texture Mapping
     glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
     //glDisable(GL_DEPTH_TEST);			// Enables Depth Testing
-    glClearColor(0,0,0,0); //Cor de fundo (preto)
-    glColor3d(0,0,0); // Cor do desenho (preto)
     glClear(GL_COLOR_BUFFER_BIT); //Limpar buffer de cor
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    glLoadIdentity();*/
 
     glViewport(0,0,width*0.75,height);
 
@@ -598,13 +635,11 @@ void Desenhar(){
     gluPerspective(90, 0.75, 10, 1600);
     //Posiciona a Câmera
     gluLookAt(0,160,200, 0,0,0, 0,1,0);
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
-
-    glEnable(GL_DEPTH_TEST); //ativa zBuffer
+/*
+    //glEnable(GL_DEPTH_TEST); //ativa zBuffer
 
     glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
+    glLoadIdentity();*/
 
     glRotated(rodarz,0,0,1);
     glRotatef(rodarx, 1, 0, 0);
@@ -656,42 +691,6 @@ void Desenhar(){
 
     /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
 
-/*
-	// Habilita o modelo de colorização de Gouraud
-	glShadeModel(GL_SMOOTH);
-
-	// Capacidade de brilho do material
-	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
-	GLint especMaterial = 60;
-	// Luz Ambiente	
-	GLfloat lAmbiente[4]={0.2,0.2,0.2,1.0}; 
-	GLfloat lDifusa[4]={0.7,0.7,0.7,1.0};	   // "cor" 
-	GLfloat lEspecular[4]={1.0, 1.0, 1.0, 1.0};// "brilho" 
-	GLfloat lposicao[4]={0.0, 50.0, 50.0, 1.0};
-
-	// Define a refletância do material 
-	glMaterialfv(GL_FRONT,GL_SPECULAR, especularidade);
-	// Define a concentração do brilho
-	glMateriali(GL_FRONT,GL_SHININESS,especMaterial);
-
-	// Ativa o uso da luz ambiente 
-	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lAmbiente);
-
-	// Define os parâmetros da luz de número 0
-	glLightfv(GL_LIGHT0, GL_AMBIENT, lAmbiente); 
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, lDifusa );
-	glLightfv(GL_LIGHT0, GL_SPECULAR, lEspecular );
-	glLightfv(GL_LIGHT0, GL_POSITION, lposicao );
-
-	// Habilita a definição da cor do material a partir da cor corrente
-	glEnable(GL_COLOR_MATERIAL);
-	//Habilita o uso de iluminação
-	glEnable(GL_LIGHTING);  
-	// Habilita a luz de número 0
-	glEnable(GL_LIGHT0);
-	// Habilita o depth-buffering
-	glEnable(GL_DEPTH_TEST);
-*/
     GerenciaPecas();
 
     jogocomecou=jogocomecou+1;
@@ -701,6 +700,11 @@ void Desenhar(){
 
     glPushMatrix();	//empilha
     glViewport(width*0.75,0,width*0.25,height);
+
+    // A textura do Menu Lateral deve ser exibida sem efeitos de luz
+    // Assim, a luz ambiente deve emitir 100% de intensidade	
+    lAmbiente[0] = lAmbiente[1] = lAmbiente[2] = lAmbiente[3] = 1.0;
+    glLightfv(GL_LIGHT0, GL_AMBIENT, lAmbiente); 
 
     glMatrixMode(GL_PROJECTION);
     	glLoadIdentity();
