@@ -58,40 +58,54 @@ void ocuparPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacio
     /* struct Malha * auxiliarMalha = 0;
      auxiliarMalha = (struct Malha *) malloc (sizeof(struct Malha));
      if(!auxiliarMalha) return;*/
-     
+    if(Ix > 7 || Iy > 7 || Iz > 7)
+        return;    
     int i=0;
     //verificaExistenciaPeca();//informaPosicao()==0
-    if((Ix+tam<=50) && (rotacionado==0))
-    for(i=Ix-1; i<tam; i++)
-	p->M[i][Iy-1][Iz-1][0] = 1; //ocupa determinadas posicoes da malha indicando que ali existe uma peca
-    else if((Iy+tam<=50) && (rotacionado==1))
-    for(i=Iy-1; i<tam; i++)
-	p->M[Ix-1][i][Iz-1][0] = 1; //ocupa determinadas posicoes da malha indicando que ali existe uma peca
-	
+    if((Ix+tam<=50) && (rotacionado==1)) {
+        for(i=Ix; i>(Ix-tam); i--){
+	    if(i > 0 && Iy < 8 && Iz < 8)
+	        p->M[i][Iy][Iz][0] = 1; //ocupa determinadas posicoes da malha indicando que ali existe uma peca
+
+//printf("\nPosicao (%d,%d,%d) = %d", i, Iy, Iz, p->M[i][Iy][Iz][0]);
+}
+    } else if((Iz+tam<=50) && (rotacionado==0)) {
+        for(i=Iz; i<(Iz+tam); i++)
+	    if(Ix < 8 && i < 8 && Iy < 8)
+	        p->M[Ix][Iy][i][0] = 1; //ocupa determinadas posicoes da malha indicando que ali existe uma peca
+
+//printf("\nPosicao (%d,%d,%d) = %d", Ix, Iy, i, p->M[Ix][Iy][i][0]);
+    }
 	//p=auxiliarMalha;
 	
 	printf("\nPosicoes ocupadas com sucesso!");
 }
 
 void esvaziaPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacionado) {
+    if(Ix > 7 || Iy > 7 || Iz > 7)
+        return;    
+
      if(rotacionado==0)
-    for(int i=Ix-1; i<tam; i++)
-	p->M[i][Iy-1][Iz-1][0] = 0; //desocupa determinadas posicoes da malha "removendo a existencia de peca ali"
+    for(int i=Ix; i<tam; i++)
+	p->M[i][Iy][Iz][0] = 0; //desocupa determinadas posicoes da malha "removendo a existencia de peca ali"
      else if(rotacionado==1)
-    for(int i=Iy-1; i<tam; i++)
-	p->M[Ix-1][i][Iz-1][0] = 0; //desocupa determinadas posicoes da malha "removendo a existencia de peca ali"
+    for(int i=Iy; i<tam; i++)
+	p->M[Ix][i][Iz][0] = 0; //desocupa determinadas posicoes da malha "removendo a existencia de peca ali"
 	
 	printf("\nPosicoes esvaziadas com sucesso!");
 }
 
 int informaPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz) {
-    printf("\nPosicao retornada era %d!", p->M[Ix-1][Iy-1][Iz-1][0]);
+    if(Ix > 7 || Iy > 7 || Iz > 7)
+        return 0;    
+
+    printf("\nPosicao retornada era %d!", p->M[Ix][Iy][Iz][0]);
     
-    return p->M[Ix-1][Iy-1][Iz-1][0]; //retorna o estado de uma posicao desejada para informe se ali existe peça ou não
+    return p->M[Ix][Iy][Iz][0]; //retorna o estado de uma posicao desejada para informe se ali existe peça ou não
 }
 
 int identificaPecaPos(MalhaAux *Malha, int Ix, int Iy, int Iz) {
-    return p->M[Ix-1][Iy-1][Iz-1][1]; //retorna o identificador da peca que consta naquela posicao
+    return p->M[Ix][Iy][Iz][1]; //retorna o identificador da peca que consta naquela posicao
 }
 
 #endif

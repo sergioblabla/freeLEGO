@@ -121,7 +121,7 @@ return *pe;
 void atualizaCorPeca(int par){
      switch(par){
                   case 0:
-                       glColor3f(0.09f,0.01f,0.0f);
+                       glColor3f(0.04f,0.01f,0.0f);
                        break;
                   case 1:
                        glColor3f(0.92f,0.9f,0.69f);

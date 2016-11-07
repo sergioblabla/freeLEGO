@@ -22,6 +22,8 @@ int moverSeta(SetinhaAux *, int, int, int);
 void selecionaPeca(SetinhaAux *, int , int , int );
 void moverPeca(SetinhaAux *, int , int , int );
 void deletarPeca(SetinhaAux *, int *, int *, int *);
+int verificaPosMatriz(SetinhaAux *Setinha, int, int, int, int);
+void ocupaPosMatriz(SetinhaAux *Setinha, int, int, int, int, int);
 
 void iniciarCursor(SetinhaAux *Setinha) {
      //variavel auxiliar alocada
@@ -55,7 +57,7 @@ int moverSeta(SetinhaAux *Setinha, int Px, int Py, int Pz) {
     //estabelece nova posicao para o seletor
     //s=auxiliarCursor;
     
-    printf("\nMoveu cursor corretamente para a posicao %d, %d, %d com; sucesso", Px, Py*-1, Pz*-1);
+    //printf("\nMoveu cursor corretamente para a posicao %d, %d, %d com; sucesso", Px, Py*-1, Pz*-1);
     return 1;
     } else {
     printf("\nNao foi possivel mover o cursor, pois esta fugindo da tela");
@@ -102,6 +104,23 @@ void deletarPeca(SetinhaAux *Setinha, int *Px, int *Py, int *Pz) {
     /*if(s->pecaSel!=0)
 	GerenciadorDeletarPeca(s->pecaSel, *Px, *Py, *Pz);*/
     //remove a peca para outra posicao atraves de outro arquivo, o gerenciador ou por aqui mesmo (não implementado)
+}
+
+int verificaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam) {
+    int ocupacoes = 0;
+    for(int i = (Pz*-1); i < ((Pz*-1)+tam); i++){
+	//printf("\nPosicao (%d,%d,%d) = %d", Px, (Py*-1), i, informaPosicao(&MatrizG, Px, (Py*-1), i));
+        if(informaPosicao(&MatrizG, Px, (Py*-1), i) != 0)
+	    ocupacoes++;
+    }
+    if(ocupacoes == 0)
+        return 0;
+    else
+        return 1;
+}
+
+void ocupaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int rotacionado) {
+    ocuparPosicao(&MatrizG, Px, (Py*-1), (Pz*-1), tam, rotacionado);
 }
 
 #endif

@@ -211,7 +211,7 @@ int pegaComprimentoPeca(PecinhaAux *Pecinha) {
 }
 
 void imprimirPeca(PecinhaAux Pec){
-    printf("\nMentira ne");
+    //printf("\nMentira ne");
     if(Pec.exibir==1)
     glPushMatrix();	//empilha
 	atualizaCorPeca(Pec.cor);
