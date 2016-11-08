@@ -22,7 +22,7 @@ double t = 0;
 double a = 0;
 
 //Variaveis de menu
-int menu = 0; //0-bem vindo, 1-menu principal, 2-jogar, 3-ajuda, 4-creditos, 5-sair
+int menu = 0; //0:bem vindo, -1:menu principal sem opcoes selecionadas, 1:menu principal, 2:jogar, 3:ajuda, 4:creditos, 5:sair
 int opcao = 0;
 int someseta=0; //teste sumir com ponteiro
 
@@ -108,11 +108,14 @@ void carregaMatrizPecas();
 
 void key(unsigned char key, int x, int y)
 {
+    // Exibe inicialmente um menu sem opções selecionadas
+    if(menu==-1)
+	menu = 1;
     switch (key) 
     {
         case '+':
             if(menu==0)
-	    menu=1;
+	    menu=-1;
             break;
         case '8':
             if(opcao>0 && opcao<4 && menu==1)
@@ -138,6 +141,7 @@ void key(unsigned char key, int x, int y)
             if(menu>1)
 	    menu=1;
             break;
+	if(menu==2){
         case 'a': //ampliar zoom
 	    if(tamanho < 61)
                 tamanho+=1;
@@ -252,6 +256,7 @@ void key(unsigned char key, int x, int y)
 		carregar(&Seta, "Bibliotecas/Objetos/lixo.obj");
 		someseta=1;
             break;
+	}
         /*case 'W': //selecionar peca na posicao
 		carregar(&Seta, "Bibliotecas/Objetos/cursor.obj");
 		someseta=0;
@@ -583,6 +588,33 @@ void Desenhar(){
     glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
     glEnd();
     break;
+    case -1://exibe um menu sem opcoes selecionadas
+    glPushMatrix();	//desempilha
+    LoadGLTextures("Imagens/mp.bmp");				// Load The Texture(s) 
+    glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
+    glClearColor(0, 0, 0, 0);			// Limpa a cor de fundo para preto 
+    glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
+    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
+    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
+    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
+    
+    glColor3d(1,1,1); // Cor do desenho (branco)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-50,50,-50,50); 
+    glMatrixMode(GL_MODELVIEW);
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
+    glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
+    glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
+    glEnd();
+    break;
     case 1: 
     /*                                                     */
     /*            M E N U    P R I N C I P A L             */
@@ -827,7 +859,7 @@ void Desenhar(){
     glColor3d(1,1,1); // Cor do desenho (branco)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
     
-    glViewport(0,0,800,500);
+    glViewport(0,0,width,height);
     glMatrixMode(GL_PROJECTION);
     	glLoadIdentity();
     gluOrtho2D(-50,50,-50,50); 
@@ -875,7 +907,7 @@ void Desenhar(){
  }
 glutSwapBuffers();
 
-    printf("\nPosição do Mouse Atual: (%.0f,%.0f,%.0f)", posCursor[0], -posCursor[1], -posCursor[2]);
+    //printf("\nPosição do Mouse Atual: (%.0f,%.0f,%.0f)", posCursor[0], -posCursor[1], -posCursor[2]);
 }
 
 void GerenciaPecas(){ //IMPRIME AS PEÇAS QUE DEVEM SER EXIBIDAS
@@ -971,9 +1003,9 @@ int main(int argc, char** argv)
    
     glutInit(&argc,argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH);
-    glutInitWindowSize(800,500);
-    
-    glutCreateWindow("Meu Lego 1.0 : Simulador");
+    glutInitWindowSize(width,height);
+
+    glutCreateWindow("free LEGO 1.0 : Simulador");
 
     carregarObjetos(); //carrega objetos modelados
     logicaJogo(); //carrega estruturas do jogo

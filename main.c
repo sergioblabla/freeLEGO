@@ -22,7 +22,7 @@ double t = 0;
 double a = 0;
 
 //Variaveis de menu
-int menu = 0; //0-bem vindo, 1-menu principal, 2-jogar, 3-ajuda, 4-creditos, 5-sair
+int menu = 0; //0:bem vindo, -1:menu principal sem opcoes selecionadas, 1:menu principal, 2:jogar, 3:ajuda, 4:creditos, 5:sair
 int opcao = 0;
 int someseta=0; //teste sumir com ponteiro
 
@@ -108,11 +108,14 @@ void carregaMatrizPecas();
 
 void key(unsigned char key, int x, int y)
 {
+    // Exibe inicialmente um menu sem opções selecionadas
+    if(menu==-1)
+	menu = 1;
     switch (key) 
     {
         case '+':
             if(menu==0)
-	    menu=1;
+	    menu=-1;
             break;
         case '8':
             if(opcao>0 && opcao<4 && menu==1)
@@ -139,104 +142,116 @@ void key(unsigned char key, int x, int y)
 	    menu=1;
             break;
         case 'a': //ampliar zoom
-	    if(tamanho < 61)
+	    if(tamanho < 61 && menu==2)
                 tamanho+=1;
             break;
         case 'A': //ampliar zoom
-	    if(tamanho < 61)
+	    if(tamanho < 61 && menu==2)
                 tamanho+=1;
             break;
         case 'd': //reduzir zoom
-	    if(tamanho > 1)
+	    if(tamanho > 1 && menu==2)
                 tamanho-=1;
             break;
         case 'D': //reduzir zoom
-	    if(tamanho > 1)
+	    if(tamanho > 1 && menu==2)
                 tamanho-=1;
             break;
 	case 'm': //rotacao extra como opcao a da funcao especial das setas do teclado
-            rodary+=10;
+	    if(menu==2)
+            	rodary+=10;
             break;
 	case 'M': //rotacao extra como opcao a da funcao especial das setas do teclado
-            rodary+=10;
+	    if(menu==2)
+            	rodary+=10;
             break;
 	case 'n': //rotacao contraria extra como opcao a da funcao especial das setas do teclado
-            rodary-=10;
+	    if(menu==2)
+            	rodary-=10;
             break;
 	case 'N': //rotacao contraria extra como opcao a da funcao especial das setas do teclado
-            rodary-=10;
+	    if(menu==2)
+            	rodary-=10;
             break;
         case 'k': //rotacao em z 
-            rodarz+=10;
+	    if(menu==2)
+            	rodarz+=10;
             break;
         case 'K': //rotacao em z 
-            rodarz+=10;
+	    if(menu==2)
+            	rodarz+=10;
             break;
 	case 'j': //rotacao em z
-            rodarz-=10;
+	    if(menu==2)
+            	rodarz-=10;
             break;
 	case 'J': //rotacao em z
-            rodarz-=10;
+	    if(menu==2)
+            	rodarz-=10;
             break;
         case 'i': //rotacao em z 
-            rodarx+=10;
+	    if(menu==2)
+            	rodarx+=10;
             break;
         case 'I': //rotacao em z 
-            rodarx+=10;
+	    if(menu==2)
+            	rodarx+=10;
             break;
 	case 'o': //rotacao em z
-            rodarx-=10;
+	    if(menu==2)
+            	rodarx-=10;
             break;
 	case 'O': //rotacao em z
-            rodarx-=10;
+	    if(menu==2)
+            	rodarx-=10;
             break;
 	case 'r': //movimento em x na matriz de posicionamento global
-	    if(posCursor[0]>0 && someseta==0)
-            posCursor[0]--; //"regrede" em relacao ao eixo x imaginado para matriz de seletor
+	    if(posCursor[0]>0 && someseta==0 && menu==2)
+            	posCursor[0]--; //"regrede" em relacao ao eixo x imaginado para matriz de seletor
             break;
 	case 'R': //movimento em x na matriz de posicionamento global
-	    if(posCursor[0]>0 && someseta==0)
-            posCursor[0]--; //"regrede" em relacao ao eixo x imaginado para matriz de seletor
+	    if(posCursor[0]>0 && someseta==0 && menu==2)
+            	posCursor[0]--; //"regrede" em relacao ao eixo x imaginado para matriz de seletor
             break;
 	case 't': //rotacao em x na matriz de posicionamento global
-	    if(posCursor[0]<=6 && someseta==0)
-            posCursor[0]++; //"avanca" em relacao ao eixo x imaginado para matriz de seletor
+	    if(posCursor[0]<=6 && someseta==0 && menu==2)
+            	posCursor[0]++; //"avanca" em relacao ao eixo x imaginado para matriz de seletor
             break;
 	case 'T': //rotacao em x na matriz de posicionamento global
-	    if(posCursor[0]<=6 && someseta==0)
-            posCursor[0]++; //"avanca" em relacao ao eixo x imaginado para matriz de seletor
+	    if(posCursor[0]<=6 && someseta==0 && menu==2)
+            	posCursor[0]++; //"avanca" em relacao ao eixo x imaginado para matriz de seletor
             break;
         case 'f': //rotacao em y na matriz de posicionamento global
-	    if(posCursor[1]<0 && someseta==0)
-            posCursor[1]++; //"avanca" em relacao ao eixo y imaginado para matriz de seletor
+	    if(posCursor[1]<0 && someseta==0 && menu==2)
+            	posCursor[1]++; //"avanca" em relacao ao eixo y imaginado para matriz de seletor
             break;
         case 'F': //rotacao em y na matriz de posicionamento global
-	    if(posCursor[1]<0 && someseta==0)
+	    if(posCursor[1]<0 && someseta==0 && menu==2)
             posCursor[1]++; //"avanca" em relacao ao eixo y imaginado para matriz de seletor
             break;
 	case 'g': //rotacao em y na matriz de posicionamento global
-	    if(posCursor[1]>=-6 && someseta==0)
-            posCursor[1]--; //"regrede" em relacao ao eixo y imaginado para matriz de seletor
+	    if(posCursor[1]>=-6 && someseta==0 && menu==2)
+            	posCursor[1]--; //"regrede" em relacao ao eixo y imaginado para matriz de seletor
             break;
 	case 'G': //rotacao em y na matriz de posicionamento global
-	    if(posCursor[1]>=-6 && someseta==0)
-            posCursor[1]--; //"regrede" em relacao ao eixo y imaginado para matriz de seletor
+	    if(posCursor[1]>=-6 && someseta==0 && menu==2)
+            	posCursor[1]--; //"regrede" em relacao ao eixo y imaginado para matriz de seletor
             break;
         case 'c': //rotacao em z na matriz de posicionamento global
-	    if(posCursor[2]<0 && someseta==0)
-            posCursor[2]++; //"avanca" em relacao ao eixo z imaginado para matriz de seletor
+	    if(posCursor[2]<0 && someseta==0 && menu==2)
+            	posCursor[2]++; //"avanca" em relacao ao eixo z imaginado para matriz de seletor
             break;
         case 'C': //rotacao em z na matriz de posicionamento global
-	    if(posCursor[2]<0 && someseta==0)
-            posCursor[2]++; //"avanca" em relacao ao eixo z imaginado para matriz de seletor
+	    if(posCursor[2]<0 && someseta==0 && menu==2)
+            	posCursor[2]++; //"avanca" em relacao ao eixo z imaginado para matriz de seletor
             break;
 	case 'v': //rotacao em z na matriz de posicionamento global
-	    if(posCursor[2]>=-6 && someseta==0)
-            posCursor[2]--; //"regrede" em relacao ao eixo z imaginado para matriz de seletor
+	    if(posCursor[2]>=-6 && someseta==0 && menu==2)
+            	posCursor[2]--; //"regrede" em relacao ao eixo z imaginado para matriz de seletor
             break;
 	case 'V': //rotacao em z na matriz de posicionamento global
-	    if(posCursor[2]>=-6 && someseta==0)
-            posCursor[2]--; //"regrede" em relacao ao eixo z imaginado para matriz de seletor
+	    if(posCursor[2]>=-6 && someseta==0 && menu==2)
+            	posCursor[2]--; //"regrede" em relacao ao eixo z imaginado para matriz de seletor
             break;
         case 's': //selecionar peca na posicao
             selecionaPeca(&cursor, posCursor[0], posCursor[1], posCursor[2]);
@@ -583,6 +598,33 @@ void Desenhar(){
     glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
     glEnd();
     break;
+    case -1://exibe um menu sem opcoes selecionadas
+    glPushMatrix();	//desempilha
+    LoadGLTextures("Imagens/mp.bmp");				// Load The Texture(s) 
+    glEnable(GL_TEXTURE_2D);			// Enable Texture Mapping
+    glClearColor(0, 0, 0, 0);			// Limpa a cor de fundo para preto 
+    glClearDepth(1.0);				// Enables Clearing Of The Depth Buffer
+    glDepthFunc(GL_LESS);			// The Type Of Depth Test To Do
+    glEnable(GL_DEPTH_TEST);			// Enables Depth Testing
+    glShadeModel(GL_SMOOTH);			// Enables Smooth Color Shading
+    
+    glColor3d(1,1,1); // Cor do desenho (branco)
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
+    
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    gluOrtho2D(-50,50,-50,50); 
+    glMatrixMode(GL_MODELVIEW);
+
+    glBindTexture(GL_TEXTURE_2D, texture[0]);   // choose the texture to use.
+
+    glBegin(GL_QUADS);
+    glTexCoord2f(0.0f, 0.0f); glVertex2f(-50.0f, -50.0f);	// Bottom Left Of The Texture and Quad
+    glTexCoord2f(1.0f, 0.0f); glVertex2f( 50.0f, -50.0f);	// Bottom Right Of The Texture and Quad
+    glTexCoord2f(1.0f, 1.0f); glVertex2f( 50.0f,  50.0f);	// Top Right Of The Texture and Quad
+    glTexCoord2f(0.0f, 1.0f); glVertex2f(-50.0f,  50.0f);	// Top Left Of The Texture and Quad
+    glEnd();
+    break;
     case 1: 
     /*                                                     */
     /*            M E N U    P R I N C I P A L             */
@@ -827,7 +869,7 @@ void Desenhar(){
     glColor3d(1,1,1); // Cor do desenho (branco)
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Limpar buffer de cor
     
-    glViewport(0,0,800,500);
+    glViewport(0,0,width,height);
     glMatrixMode(GL_PROJECTION);
     	glLoadIdentity();
     gluOrtho2D(-50,50,-50,50); 
@@ -971,9 +1013,9 @@ int main(int argc, char** argv)
    
     glutInit(&argc,argv);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_ALPHA | GLUT_DEPTH);
-    glutInitWindowSize(800,500);
-    
-    glutCreateWindow("Meu Lego 1.0 : Simulador");
+    glutInitWindowSize(width,height);
+
+    glutCreateWindow("free LEGO 1.0 : Simulador");
 
     carregarObjetos(); //carrega objetos modelados
     logicaJogo(); //carrega estruturas do jogo
