@@ -21,7 +21,7 @@ void iniciarCursor(SetinhaAux *);
 int moverSeta(SetinhaAux *, int, int, int);
 void selecionaPeca(SetinhaAux *, int , int , int );
 void moverPeca(SetinhaAux *, int , int , int );
-void deletarPeca(SetinhaAux *, int *, int *, int *);
+void deletarPeca(SetinhaAux *, int );
 int verificaPosMatriz(SetinhaAux *Setinha, int , int , int , int );
 void ocupaPosMatriz(SetinhaAux *Setinha, int , int , int , int , int , int );
 int identificaPecaPosicao(SetinhaAux *Setinha, int , int , int );
@@ -101,10 +101,8 @@ void moverPeca(SetinhaAux *Setinha, int Px, int Py, int Pz) {
     //translada a peca para outra posicao atraves de outro arquivo, o gerenciador ou por aqui mesmo (não implementado)
 }
 
-void deletarPeca(SetinhaAux *Setinha, int *Px, int *Py, int *Pz) {
-    /*if(s->pecaSel!=0)
-	GerenciadorDeletarPeca(s->pecaSel, *Px, *Py, *Pz);*/
-    //remove a peca para outra posicao atraves de outro arquivo, o gerenciador ou por aqui mesmo (não implementado)
+void deletarPeca(SetinhaAux *Setinha, int pecaId) {
+    esvaziaPosPeca(&MatrizG, pecaId);
 }
 
 int verificaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam) {

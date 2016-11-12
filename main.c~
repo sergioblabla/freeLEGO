@@ -87,7 +87,8 @@ int blocotipo3am = 0; //1x8 amarelo
 int blocotipo3vd = 0; //1x8 verde
 int blocotipo3az = 0; //1x8 azul
 int seguraPeca = 0;
-int pecasadd = 0;
+int pecasadd = 0;            
+int delPecaId = -1;
 
 //estruturas
 SetinhaAux cursor;
@@ -186,6 +187,9 @@ void key(unsigned char key, int x, int y)
             if(menu>1)
 	        menu=1;
             break;
+    /**********************************************************
+    *             Tela de Partida Zoom Operações              *
+    ***********************************************************/
         case 'a': //ampliar zoom
 	    if(tamanho < 61 && menu==2)
                 tamanho+=1;
@@ -202,6 +206,10 @@ void key(unsigned char key, int x, int y)
 	    if(tamanho > 1 && menu==2)
                 tamanho-=1;
             break;
+
+    /**********************************************************
+    *           Tela de Partida Câmera Operações              *
+    ***********************************************************/
 	case 'm': //rotacao extra como opcao a da funcao especial das setas do teclado
 	    if(menu==2)
             	rodary+=10;
@@ -250,6 +258,10 @@ void key(unsigned char key, int x, int y)
 	    if(menu==2)
             	rodarx-=10;
             break;
+
+    /**********************************************************
+    *        Tela de Partida Cursor de Peças Operações        *
+    ***********************************************************/
 	case 'r': //movimento em x na matriz de posicionamento global
 	    if(posCursor[0]>0 && someseta==0 && menu==2)
             	posCursor[0]--; //"regrede" em relacao ao eixo x imaginado para matriz de seletor
@@ -298,6 +310,25 @@ void key(unsigned char key, int x, int y)
 	    if(posCursor[2]>=-6 && someseta==0 && menu==2)
             	posCursor[2]--; //"regrede" em relacao ao eixo z imaginado para matriz de seletor
             break;
+
+    /**********************************************************
+    *           Tela de Partida Pecinhas Operações            *
+    ***********************************************************/
+	// Delete
+        case 127: { // remover pecinhas
+	    delPecaId = identificaPecaPosicao(&cursor, posCursor[0], posCursor[1], posCursor[2]);
+	    //delPecaId = verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1);
+	    	printf("Oh GOTT delPecaId = %d \n\n", delPecaId);
+	    	printf("Posicao Cursor[x,y,z] = [%.0f,%.0f,%.0f] \n\n", posCursor[0], -posCursor[1], -posCursor[2]);
+	
+	    if(delPecaId != -1) {
+	    	printf("Oh GOTT delPecaId = %d \n\n", delPecaId);
+	   	deletarPeca(&cursor, delPecaId);
+            	MinhasPecas[delPecaId] = apagaPeca();
+		delPecaId = -1;
+	    }
+            break;
+	}
         case 's': //selecionar peca na posicao
             selecionaPeca(&cursor, posCursor[0], posCursor[1], posCursor[2]);
             break;
@@ -316,6 +347,10 @@ void key(unsigned char key, int x, int y)
 		carregar(&Seta, "Bibliotecas/Objetos/cursor.obj");
 		someseta=0;
             break;*/
+
+    /**********************************************************
+    *                 Jogo: Extra Operações                   *
+    ***********************************************************/
 	case 'q': //sair
             exit(0);
             break;
@@ -966,10 +1001,13 @@ glutSwapBuffers();
 }
 
 void GerenciaPecas(){ //IMPRIME AS PEÇAS QUE DEVEM SER EXIBIDAS
-    for(int ax=0; ax<240; ax++){
-	imprimirPeca(MinhasPecas[ax]);
-    	glutPostRedisplay();
+    for(int ax=0; ax<240; ax++) {
+	if(MinhasPecas[ax].exibir == 1) {
+	    imprimirPeca(MinhasPecas[ax]);
+	}
     }
+
+    glutPostRedisplay();
 }
 
 void relogio(){ //por fator dinamico e dependencia em movimentos, utiliza-se hora para alterar variavel global responsavel para tal
@@ -990,7 +1028,7 @@ void logicaJogo(){
     printf("\n Carregando Bibliotecas de lógica.");
     iniciarCursor(&cursor);
     printf("\n Biblioteca Seletor.h processada com sucesso.");
-    carregaMatrizPecas();
+    //carregaMatrizPecas();
     printf("\n Balde de Lego adquirido com sucesso! :D ");
 }
 

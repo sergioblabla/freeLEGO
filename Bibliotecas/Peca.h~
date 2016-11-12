@@ -113,9 +113,30 @@ return *pe;
 }
 
 PecinhaAux apagaPeca(){
-	carregar(&Bloco, "Bibliotecas/Objetos/lixo.obj");
-	pe->Obj=Bloco;
-return *pe;
+    // variavel auxiliar alocada
+    struct Pecinha * auxiliarPeca = 0;
+    auxiliarPeca = (struct Pecinha *) malloc (sizeof(struct Pecinha));
+
+    auxiliarPeca->identificador = 0;
+    auxiliarPeca->rotacionada = 0;
+    auxiliarPeca->posmx = 0;
+    auxiliarPeca->posmy = 0;
+    auxiliarPeca->posmz = 0;
+    auxiliarPeca->cor = 0;
+    auxiliarPeca->tipo = 0;
+    auxiliarPeca->tamp = 0;
+    auxiliarPeca->transx = 0;
+    auxiliarPeca->transy = 0;
+    auxiliarPeca->transz = 0;
+    auxiliarPeca->exibir = 0;
+
+    // carrega objeto 3D
+    carregar(&Bloco, "Bibliotecas/Objetos/lixo.obj");
+    auxiliarPeca->Obj=Bloco;
+
+    pe = auxiliarPeca;
+
+    return *pe;
 }
 
 void atualizaCorPeca(int par){
@@ -211,7 +232,7 @@ int pegaComprimentoPeca(PecinhaAux *Pecinha) {
 }
 
 void imprimirPeca(PecinhaAux Pec){
-    printf("\nMentira ne");
+    //printf("\nMentira ne");
     if(Pec.exibir==1)
     glPushMatrix();	//empilha
 	atualizaCorPeca(Pec.cor);

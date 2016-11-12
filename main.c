@@ -87,7 +87,8 @@ int blocotipo3am = 0; //1x8 amarelo
 int blocotipo3vd = 0; //1x8 verde
 int blocotipo3az = 0; //1x8 azul
 int seguraPeca = 0;
-int pecasadd = 0;
+int pecasadd = 0;            
+int delPecaId = -1;
 
 //estruturas
 SetinhaAux cursor;
@@ -313,6 +314,17 @@ void key(unsigned char key, int x, int y)
     /**********************************************************
     *           Tela de Partida Pecinhas Operações            *
     ***********************************************************/
+	// Delete
+        case 127: { // remover pecinhas
+	    delPecaId = identificaPecaPosicao(&cursor, posCursor[0], posCursor[1], posCursor[2]);
+
+	    if(delPecaId != -1) {
+	   	deletarPeca(&cursor, delPecaId);
+            	MinhasPecas[delPecaId] = apagaPeca();
+		delPecaId = -1;
+	    }
+            break;
+	}
         case 's': //selecionar peca na posicao
             selecionaPeca(&cursor, posCursor[0], posCursor[1], posCursor[2]);
             break;
@@ -985,10 +997,13 @@ glutSwapBuffers();
 }
 
 void GerenciaPecas(){ //IMPRIME AS PEÇAS QUE DEVEM SER EXIBIDAS
-    for(int ax=0; ax<240; ax++){
-	imprimirPeca(MinhasPecas[ax]);
-    	glutPostRedisplay();
+    for(int ax=0; ax<240; ax++) {
+	if(MinhasPecas[ax].exibir == 1) {
+	    imprimirPeca(MinhasPecas[ax]);
+	}
     }
+
+    glutPostRedisplay();
 }
 
 void relogio(){ //por fator dinamico e dependencia em movimentos, utiliza-se hora para alterar variavel global responsavel para tal
@@ -1009,7 +1024,7 @@ void logicaJogo(){
     printf("\n Carregando Bibliotecas de lógica.");
     iniciarCursor(&cursor);
     printf("\n Biblioteca Seletor.h processada com sucesso.");
-    carregaMatrizPecas();
+    //carregaMatrizPecas();
     printf("\n Balde de Lego adquirido com sucesso! :D ");
 }
 

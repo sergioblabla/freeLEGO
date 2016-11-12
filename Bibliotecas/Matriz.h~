@@ -28,18 +28,17 @@ struct EixoZ {
 
 void iniciarMalha(MalhaAux *);
 void ocuparPosicao(MalhaAux *, int , int , int , int , int , int );
-void esvaziaPosicao(MalhaAux *, int , int , int , int , int );
+void esvaziaPosPeca(MalhaAux *, int );
 int informaPosicao(MalhaAux *, int , int , int );
 int identificaPecaPos(MalhaAux *, int , int , int );
 
 void iniciarMalha(MalhaAux *Malha) {
-     //variavel auxiliar alocada
-     struct Malha * auxiliarMalha = 0;
-     auxiliarMalha = (struct Malha *) malloc (sizeof(struct Malha));
-     if(!auxiliarMalha) return;
-    
-    printf("\nlindo");
-    int aux=0;
+    //variavel auxiliar alocada
+    struct Malha * auxiliarMalha = 0;
+    auxiliarMalha = (struct Malha *) malloc (sizeof(struct Malha));
+    if(!auxiliarMalha) 
+	return;
+   
     for(int j=0; j<8; j++)
 	        for(int k=0; k<8; k++)
 	                for(int l=0; l<8; l++)
@@ -63,7 +62,7 @@ void ocuparPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacio
     int i=0;
     //verificaExistenciaPeca();//informaPosicao()==0
     if((Ix+tam<=50) && (rotacionado==1)) {
-        for(i=Ix; i>(Ix-tam); i--){
+        for(i=Ix; i>(Ix-tam); i--) {
 	    if(i > 0 && Iy < 8 && Iz < 8) {
 	        p->M[i][Iy][Iz][0] = 1; 		// ocupa determinadas posicoes da malha indicando que ali existe uma peca
 		p->M[i][Iy][Iz][1] = rotacionado;	// indica se a peca esta rotacionada
@@ -73,12 +72,13 @@ void ocuparPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacio
 	//printf("\nPosicao (%d,%d,%d) = %d", i, Iy, Iz, p->M[i][Iy][Iz][0]);
 	}
     } else if((Iz+tam<=50) && (rotacionado==0)) {
-        for(i=Iz; i<(Iz+tam); i++)
-	    if(Ix < 8 && i < 8 && Iy < 8)
+        for(i=Iz; i<(Iz+tam); i++) {
+	    if(Ix < 8 && i < 8 && Iy < 8) {
 	        p->M[Ix][Iy][i][0] = 1; 		// ocupa determinadas posicoes da malha indicando que ali existe uma peca
 		p->M[Ix][Iy][i][1] = rotacionado;	// indica se a peca esta rotacionada
 		p->M[Ix][Iy][i][2] = pecaId;		// indentificador da peca
-
+	    }
+	}
 //printf("\nPosicao (%d,%d,%d) = %d", Ix, Iy, i, p->M[Ix][Iy][i][0]);
     }
 	//p=auxiliarMalha;
@@ -86,18 +86,25 @@ void ocuparPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacio
 	printf("\nPosicoes ocupadas com sucesso!");
 }
 
-void esvaziaPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacionado) {
-    if(Ix > 7 || Iy > 7 || Iz > 7)
+void esvaziaPosPeca(MalhaAux *Malha, int pecaId) {
+    if(pecaId == -1)
         return;    
 
-     if(rotacionado==0)
-    for(int i=Ix; i<tam; i++)
-	p->M[i][Iy][Iz][0] = 0; //desocupa determinadas posicoes da malha "removendo a existencia de peca ali"
-     else if(rotacionado==1)
-    for(int i=Iy; i<tam; i++)
-	p->M[Ix][i][Iz][0] = 0; //desocupa determinadas posicoes da malha "removendo a existencia de peca ali"
-	
-	printf("\nPosicoes esvaziadas com sucesso!");
+    // Esvazia todas as informações de posições na malha relacionadas a peça com identificador pecaId
+    for(int j=0; j<8; j++) {
+	        for(int k=0; k<8; k++) {
+	                for(int l=0; l<8; l++) {
+			    if(p->M[j][k][l][2] == pecaId && p->M[j][k][l][0] == 1) {
+				p->M[j][k][l][0] == 0;
+				p->M[j][k][l][1] == 0;
+				p->M[j][k][l][2] == 0;
+				printf("\n\n\nHey Du BÖSE!\n\n\n)");
+			    }
+			}
+		}
+    }
+
+    printf("\nPosicoes esvaziadas com sucesso!");
 }
 
 int informaPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz) {
@@ -110,7 +117,10 @@ int informaPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz) {
 }
 
 int identificaPecaPos(MalhaAux *Malha, int Ix, int Iy, int Iz) {
-    return p->M[Ix][Iy][Iz][1]; //retorna o identificador da peca que consta naquela posicao
+    if(p->M[Ix][Iy][Iz][0] == 1)
+        return p->M[Ix][Iy][Iz][2]; //retorna o identificador da peca que consta naquela posicao
+    else
+        return -1;
 }
 
 #endif
