@@ -22,8 +22,9 @@ int moverSeta(SetinhaAux *, int, int, int);
 void selecionaPeca(SetinhaAux *, int , int , int );
 void moverPeca(SetinhaAux *, int , int , int );
 void deletarPeca(SetinhaAux *, int *, int *, int *);
-int verificaPosMatriz(SetinhaAux *Setinha, int, int, int, int);
-void ocupaPosMatriz(SetinhaAux *Setinha, int, int, int, int, int);
+int verificaPosMatriz(SetinhaAux *Setinha, int , int , int , int );
+void ocupaPosMatriz(SetinhaAux *Setinha, int , int , int , int , int , int );
+int identificaPecaPosicao(SetinhaAux *Setinha, int , int , int );
 
 void iniciarCursor(SetinhaAux *Setinha) {
      //variavel auxiliar alocada
@@ -119,8 +120,16 @@ int verificaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam) {
         return 1;
 }
 
-void ocupaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int rotacionado) {
-    ocuparPosicao(&MatrizG, Px, (Py*-1), (Pz*-1), tam, rotacionado);
+void ocupaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int rotacionado, int pecaId) {
+    ocuparPosicao(&MatrizG, Px, (Py*-1), (Pz*-1), tam, rotacionado, pecaId);
+}
+
+int identificaPecaPosicao(SetinhaAux *Setinha, int Px, int Py, int Pz) {
+    int pecaId = -1;
+
+    pecaId = identificaPecaPos(&MatrizG, Px, (Py*-1), (Pz*-1));
+
+    return pecaId;
 }
 
 #endif

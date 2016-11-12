@@ -98,6 +98,7 @@ int height=500;
 
 //Cabeçalhos das funções:
 void key(unsigned char , int , int );
+void specialKeys(int , int , int );
 static void rato(int , int , int , int );
 void Desenhar();
 void GerenciaPecas();
@@ -106,6 +107,46 @@ void carregarObjetos();
 void logicaJogo();
 void carregaMatrizPecas();
 
+void specialKeys(int key, int x, int y)
+{
+    	// Exibe inicialmente um menu sem opções selecionadas
+    	if(menu==-1)
+	    menu = 1;
+
+	switch(key)
+	{
+
+    /**********************************************************
+    *                Menu Acesso Operações                    *
+    ***********************************************************/
+	    case GLUT_KEY_UP:
+		if(opcao>0 && opcao<4 && menu==1)
+	            opcao--;
+		break;
+	    case GLUT_KEY_DOWN:
+		if(opcao>=0 && opcao<3 && menu==1)
+	            opcao++;
+		break;
+	    case GLUT_KEY_RIGHT:
+		if(opcao==0 && menu==1){
+	            menu=2;
+	            LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
+	        }
+	        if(opcao==1 && menu==1)
+	            menu=3;
+	        if(opcao==2 && menu==1)
+	            menu=4;
+	        if(opcao==3 && menu==1)
+	            exit(0);
+		break;
+	    case GLUT_KEY_LEFT:
+		if(menu>1)
+	            menu=1;
+		break;
+	}
+
+        glutPostRedisplay();
+}
 void key(unsigned char key, int x, int y)
 {
     // Exibe inicialmente um menu sem opções selecionadas
@@ -113,34 +154,41 @@ void key(unsigned char key, int x, int y)
 	menu = 1;
     switch (key) 
     {
+	
+    /**********************************************************
+    *                Menu Acesso Operações                    *
+    ***********************************************************/
         case '+':
             if(menu==0)
-	    menu=-1;
-            break;
+	        menu=-1;
+	    break;
         case '8':
             if(opcao>0 && opcao<4 && menu==1)
-	    opcao--;
+	        opcao--;
             break;
 	case '2':
             if(opcao>=0 && opcao<3 && menu==1)
-	    opcao++;
+	        opcao++;
             break;
 	case '6':
             if(opcao==0 && menu==1){
-	    menu=2;
-    	    LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
+	        menu=2;
+	        LoadGLTextures("Imagens/menulateral.bmp"); //carrega textura do menu lateral
 	    }
 	    if(opcao==1 && menu==1)
-	    menu=3;
+	        menu=3;
 	    if(opcao==2 && menu==1)
-	    menu=4;
+	        menu=4;
 	    if(opcao==3 && menu==1)
-	    exit(0);
+	        exit(0);
             break;
 	case '4':
             if(menu>1)
-	    menu=1;
+	        menu=1;
             break;
+    /**********************************************************
+    *             Tela de Partida Zoom Operações              *
+    ***********************************************************/
         case 'a': //ampliar zoom
 	    if(tamanho < 61 && menu==2)
                 tamanho+=1;
@@ -157,6 +205,10 @@ void key(unsigned char key, int x, int y)
 	    if(tamanho > 1 && menu==2)
                 tamanho-=1;
             break;
+
+    /**********************************************************
+    *           Tela de Partida Câmera Operações              *
+    ***********************************************************/
 	case 'm': //rotacao extra como opcao a da funcao especial das setas do teclado
 	    if(menu==2)
             	rodary+=10;
@@ -205,6 +257,10 @@ void key(unsigned char key, int x, int y)
 	    if(menu==2)
             	rodarx-=10;
             break;
+
+    /**********************************************************
+    *        Tela de Partida Cursor de Peças Operações        *
+    ***********************************************************/
 	case 'r': //movimento em x na matriz de posicionamento global
 	    if(posCursor[0]>0 && someseta==0 && menu==2)
             	posCursor[0]--; //"regrede" em relacao ao eixo x imaginado para matriz de seletor
@@ -227,7 +283,7 @@ void key(unsigned char key, int x, int y)
             break;
         case 'F': //rotacao em y na matriz de posicionamento global
 	    if(posCursor[1]<0 && someseta==0 && menu==2)
-            posCursor[1]++; //"avanca" em relacao ao eixo y imaginado para matriz de seletor
+	        posCursor[1]++; //"avanca" em relacao ao eixo y imaginado para matriz de seletor
             break;
 	case 'g': //rotacao em y na matriz de posicionamento global
 	    if(posCursor[1]>=-6 && someseta==0 && menu==2)
@@ -253,6 +309,10 @@ void key(unsigned char key, int x, int y)
 	    if(posCursor[2]>=-6 && someseta==0 && menu==2)
             	posCursor[2]--; //"regrede" em relacao ao eixo z imaginado para matriz de seletor
             break;
+
+    /**********************************************************
+    *           Tela de Partida Pecinhas Operações            *
+    ***********************************************************/
         case 's': //selecionar peca na posicao
             selecionaPeca(&cursor, posCursor[0], posCursor[1], posCursor[2]);
             break;
@@ -260,17 +320,21 @@ void key(unsigned char key, int x, int y)
             selecionaPeca(&cursor, posCursor[0], posCursor[1], posCursor[2]);
             break;
         case 'w': //selecionar peca na posicao
-		carregar(&Seta, "Bibliotecas/Objetos/lixo.obj");
-		someseta=1;
+	    carregar(&Seta, "Bibliotecas/Objetos/lixo.obj");
+	    someseta=1;
             break;
         case 'W': //selecionar peca na posicao
-		carregar(&Seta, "Bibliotecas/Objetos/lixo.obj");
-		someseta=1;
+	    carregar(&Seta, "Bibliotecas/Objetos/lixo.obj");
+	    someseta=1;
             break;
         /*case 'W': //selecionar peca na posicao
 		carregar(&Seta, "Bibliotecas/Objetos/cursor.obj");
 		someseta=0;
             break;*/
+
+    /**********************************************************
+    *                 Jogo: Extra Operações                   *
+    ***********************************************************/
 	case 'q': //sair
             exit(0);
             break;
@@ -306,7 +370,7 @@ static void rato(int botao, int estado, int x, int y){
     if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 preta
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
             MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 0, 1, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
@@ -316,7 +380,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 branca
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 0, 1, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
             pecasadd++;
@@ -326,7 +390,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 vermelha
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 0, 1, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
@@ -336,7 +400,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 amarela
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 0, 1, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
@@ -346,7 +410,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 verde
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 0, 1, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
@@ -356,7 +420,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 azul
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 0, 1, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
@@ -370,7 +434,7 @@ static void rato(int botao, int estado, int x, int y){
     else if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 preta
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 1, 2, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
@@ -380,7 +444,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 branca
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 1, 2, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
@@ -390,7 +454,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 vermelha
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 1, 2, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
@@ -400,7 +464,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 amarela
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 1, 2, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
@@ -410,7 +474,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 verde
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 1, 2, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
@@ -420,7 +484,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 azul
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 1, 2, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
@@ -434,7 +498,7 @@ static void rato(int botao, int estado, int x, int y){
     else if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 preta
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 2, 4, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
@@ -444,7 +508,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 branca
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 2, 4, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
@@ -454,7 +518,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 vermelha
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 2, 4, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
@@ -464,7 +528,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 amarela
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 2, 4, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
@@ -474,7 +538,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 verde
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 2, 4, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
@@ -484,7 +548,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 azul
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 2, 4, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
@@ -498,7 +562,7 @@ static void rato(int botao, int estado, int x, int y){
     else if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 preta
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 3, 8, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
@@ -508,7 +572,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 branca
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 3, 8, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
@@ -518,7 +582,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 vermelha
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 3, 8, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
@@ -528,7 +592,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 amarela
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 3, 8, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
@@ -538,7 +602,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 verde
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 3, 8, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
@@ -548,7 +612,7 @@ static void rato(int botao, int estado, int x, int y){
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 azul
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
-	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0);
+	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
 	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 3, 8, 1);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
@@ -1021,6 +1085,7 @@ int main(int argc, char** argv)
     logicaJogo(); //carrega estruturas do jogo
 
     glutKeyboardFunc(key);
+    glutSpecialFunc(specialKeys);
 
     glutIdleFunc(relogio);
     glutDisplayFunc(Desenhar);
