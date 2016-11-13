@@ -31,7 +31,7 @@ void atualizaCorPeca(int );
 void alteraPosicao(PecinhaAux *, int , int , int );
 PecinhaAux alteraTransladoPeca(float , float , float );
 void pegaPosicao(PecinhaAux *, int *);
-PecinhaAux rotacionaPeca(int );
+PecinhaAux rotacionaPeca(PecinhaAux * , int );
 int pegaTamanho(PecinhaAux *);
 void imprimirPeca(PecinhaAux );
 
@@ -208,9 +208,17 @@ void pegaPosicaoPeca(PecinhaAux *Pecinha, int *ArrAux) {
     ArrAux[2] = pe->posmz;
 }
 
-PecinhaAux rotacionaPeca(int rotaciona) {
-
+PecinhaAux rotacionaPeca(PecinhaAux *Pecinha, int rotaciona) {
+/*
     pe->rotacionada = rotaciona;
+
+    return *pe;*/
+
+    struct Pecinha * auxiliarPeca = Pecinha;
+
+    auxiliarPeca->rotacionada = rotaciona;
+
+    pe = auxiliarPeca;
 
     return *pe;
 }

@@ -31,7 +31,7 @@ void atualizaCorPeca(int );
 void alteraPosicao(PecinhaAux *, int , int , int );
 PecinhaAux alteraTransladoPeca(float , float , float );
 void pegaPosicao(PecinhaAux *, int *);
-PecinhaAux rotacionaPeca(int );
+PecinhaAux rotacionaPeca(PecinhaAux * , int );
 int pegaTamanho(PecinhaAux *);
 void imprimirPeca(PecinhaAux );
 
@@ -61,7 +61,7 @@ PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe, int rota
     auxiliarPeca->transz = 0;
     auxiliarPeca->exibir = exibe;
 
-			printf("\nAuxCor=%d, AuxTipo=%d, AuxTamp=%d, AuxExibir=%d)\n", color, type, size, exibe, rotaciona);
+			//printf("\nAuxCor=%d, AuxTipo=%d, AuxTamp=%d, AuxExibir=%d)\n", color, type, size, exibe, rotaciona);
 
     if(exibe==1){
     switch(type){ //carrega o objeto correto de acordo com o tipo
@@ -208,9 +208,17 @@ void pegaPosicaoPeca(PecinhaAux *Pecinha, int *ArrAux) {
     ArrAux[2] = pe->posmz;
 }
 
-PecinhaAux rotacionaPeca(int rotaciona) {
-
+PecinhaAux rotacionaPeca(PecinhaAux *balde, int pos, int rotaciona) {
+/*
     pe->rotacionada = rotaciona;
+
+    return *pe;*/
+
+    struct Pecinha * auxiliarPeca = Pecinha;
+
+    auxiliarPeca->rotacionada = rotaciona;
+
+    pe = auxiliarPeca;
 
     return *pe;
 }

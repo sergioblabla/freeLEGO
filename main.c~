@@ -339,75 +339,52 @@ void key(unsigned char key, int x, int y)
 		} else {
 		    // Verifica se pecinha já estava rotacionada
 			printf("\nRotacionada = %d\n", MinhasPecas[girarPeca].rotacionada);
-		    
-    		    //PecinhaAux auxiliarPeca = novaPeca(i, 0, 0, 1, 0, 0);
-		    //auxiliarPeca
-		    int auxCor = MinhasPecas[girarPeca].cor, 
-			auxTipo = MinhasPecas[girarPeca].tipo, 
-			auxTamp = MinhasPecas[girarPeca].tamp, 
-			auxExibir = MinhasPecas[girarPeca].exibir; 
-
-			//printf("\nAuxCor=%d, AuxTipo=%d, AuxTamp=%d, AuxExibir=%d)\n", auxCor, auxTipo, auxTamp, auxExibir, 0);
-
 		    if(MinhasPecas[girarPeca].rotacionada == 1) {
 			// Verifica se há espaço naquela direção para a pecinha ser rotacionada
-			if(verificaPosMatriz(&cursor, posCursor[0]+1, posCursor[1], posCursor[2], auxTamp-1, 0) == 0) { 
+			if(verificaPosMatriz(&cursor, posCursor[0]+1, posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp-1, 0) == 0) { 
 			    printf("\n\nOHO\n\n");
 
-	    		    //MinhasPecas[pecasadd] = novaPeca(1, 1, 3, 8, 1, 0);
-	    		    MinhasPecas[pecasadd] = novaPeca(pecasadd, auxCor, auxTipo, auxTamp, auxExibir, 0);
-			    //MinhasPecas[pecasadd] = rotacionaPeca(0);
+			    MinhasPecas[girarPeca] = rotacionaPeca(0);
 
 			    switch(MinhasPecas[girarPeca].tamp) {
 			    	case 2:
-				    MinhasPecas[pecasadd] = alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2-1);
+				    MinhasPecas[girarPeca] = alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2-1);
 				    break;
 			    	case 4:
-				    MinhasPecas[pecasadd] = alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2-3);
+				    MinhasPecas[girarPeca] = alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2-3);
 				    break;
 			    	case 8:
-				    MinhasPecas[pecasadd] = alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2-7);
+				    MinhasPecas[girarPeca] = alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2-7);
 				    break;
 			    }
 
 	   		    deletarPeca(&cursor, girarPeca);
 
-			    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], auxTamp, 0, pecasadd);
+			    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp, 0, girarPeca);
 
-			    MinhasPecas[girarPeca] = apagaPeca();
-			    pecasadd++;
 			}
 		    } else {
 		    // Não estava rotacionada
-			if(verificaPosMatriz(&cursor, posCursor[0]-1, posCursor[1], posCursor[2], auxTamp-1, 1) == 0) { 
+			if(verificaPosMatriz(&cursor, posCursor[0]-1, posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp-1, 1) == 0) { 
 			    printf("\n\nYEY\n\n");
-/*
-	    		    //MinhasPecas[pecasadd] = novaPeca(1, 1, 3, 8, 1, 1);
-	    		    MinhasPecas[pecasadd] = novaPeca(pecasadd, auxCor, auxTipo, auxTamp, auxExibir, 1);
-			    //MinhasPecas[pecasadd] = rotacionaPeca(1);
+
+			    MinhasPecas[girarPeca] = rotacionaPeca(1);
 
 			    switch(MinhasPecas[girarPeca].tamp) {
 			    	case 2:
-				    MinhasPecas[pecasadd] = alteraTransladoPeca(-(posCursor[2])*2, (posCursor[1]+0.25)*2, (posCursor[0])*2-1);
+				    MinhasPecas[girarPeca] = alteraTransladoPeca(-(posCursor[2])*2, (posCursor[1]+0.25)*2, (posCursor[0])*2-1);
 				    break;
 			    	case 4:
-				    MinhasPecas[pecasadd] = alteraTransladoPeca(-(posCursor[2])*2, (posCursor[1]+0.25)*2, (posCursor[0])*2-3);
+				    MinhasPecas[girarPeca] = alteraTransladoPeca(-(posCursor[2])*2, (posCursor[1]+0.25)*2, (posCursor[0])*2-3);
 				    break;
 			    	case 8:
-				    MinhasPecas[pecasadd] = alteraTransladoPeca(-(posCursor[2])*2, (posCursor[1]+0.25)*2, (posCursor[0])*2-7);
+				    MinhasPecas[girarPeca] = alteraTransladoPeca(-(posCursor[2])*2, (posCursor[1]+0.25)*2, (posCursor[0])*2-7);
 				    break;
 			    }
 
 	   		    deletarPeca(&cursor, girarPeca);
 
-			    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], auxTamp, 1, pecasadd);
-
-			    MinhasPecas[girarPeca] = apagaPeca();*/
-
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 0, 1, 1, 0);
-    	    //MinhasPecas[pecasadd] = novaPeca(pecasadd, auxCor, auxTipo, auxTamp, auxExibir, 1);
-            MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
-			    pecasadd++;
+			    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp, 1, girarPeca);
 			}
 		    }
 		}
@@ -476,7 +453,7 @@ static void rato(int botao, int estado, int x, int y){
 	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
             MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 0, 1, 1, 0);
-            //MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
+            MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
 	    seguraPeca=0;
