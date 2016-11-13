@@ -89,6 +89,7 @@ int blocotipo3az = 0; //1x8 azul
 int seguraPeca = 0;
 int pecasadd = 0;            
 int delPecaId = -1;
+int girarPeca = -1;
 
 //estruturas
 SetinhaAux cursor;
@@ -325,6 +326,50 @@ void key(unsigned char key, int x, int y)
 	    }
             break;
 	}
+	// Rodar Pecinha
+	case 13: {
+	    // Pega ID da pecinha naquela posicao
+	    girarPeca = identificaPecaPosicao(&cursor, posCursor[0], posCursor[1], posCursor[2]);
+	    
+	    // Se não há peça alguma naquela posição, não faz nada
+	    if(girarPeca == -1) {
+	    } else {
+		// Se pecinha tem comprimento 1, ou seja, é 1x1, não faz nada
+		if(MinhasPecas[girarPeca].tamp == 1) {
+		} else {
+		    // Verifica se pecinha já estava rotacionada
+			printf("\nRotacionada = %d\n", MinhasPecas[girarPeca].rotacionada);
+		    if(MinhasPecas[girarPeca].rotacionada == 1) {
+			// Verifica se há espaço naquela direção para a pecinha ser rotacionada
+			if(verificaPosMatriz(&cursor, posCursor[0]+1, posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp-1, 0) == 0) { 
+			    printf("\n\nOHO\n\n");
+	   		    //deletarPeca(&cursor, girarPeca);
+			    //ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp, 0, girarPeca);
+            		    //MinhasPecas[girarPeca].rotacionada = 0;
+			    MinhasPecas[girarPeca] = rotacionaPeca();
+			}
+		    } else {
+		    // Não estava rotacionada
+			if(verificaPosMatriz(&cursor, posCursor[0]-1, posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp-1, 1) == 0) { 
+			    printf("\n\nYEY\n\n");
+	   		    //deletarPeca(&cursor, girarPeca);
+			    //ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp, 1, girarPeca);
+            		    //MinhasPecas[girarPeca].rotacionada = 1;
+			    MinhasPecas[girarPeca] = rotacionaPeca();
+			    //MinhasPecas[girarPeca].transx = (posCursor[0])*2;
+			    //MinhasPecas[girarPeca].transy = -MinhasPecas[girarPeca].transy;
+			    //MinhasPecas[girarPeca].transz = (posCursor[2])*2;
+			    /*MinhasPecas[girarPeca].transx = (posCursor[0])*2;
+			    MinhasPecas[girarPeca].transy = (posCursor[1]+0.25)*2;
+			    MinhasPecas[girarPeca].transz = (posCursor[2])*2;*/
+			}
+		    }
+		}
+		girarPeca = -1;
+	    }
+	    printf("\nPosicao Trans: (%.3f,%.3f,%.3f)\n", (posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2);
+	    break;
+	}
         case 's': //selecionar peca na posicao
             selecionaPeca(&cursor, posCursor[0], posCursor[1], posCursor[2]);
             break;
@@ -381,9 +426,9 @@ static void rato(int botao, int estado, int x, int y){
 //
     if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 preta
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
-            MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 0, 1, 1);
+            MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 0, 1, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -391,9 +436,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 branca
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 0, 1, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 0, 1, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
             pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -401,9 +446,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 vermelha
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 0, 1, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 0, 1, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -411,9 +456,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 amarela
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 0, 1, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 0, 1, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -421,9 +466,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 verde
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 0, 1, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 0, 1, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -431,9 +476,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=48 && y<=80 && seguraPeca==0){
 //adicionar peça 1x1 azul
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 1, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 0, 1, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 0, 1, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2])*2); //blocotipo0
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -445,9 +490,9 @@ static void rato(int botao, int estado, int x, int y){
 //
     else if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 preta
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 1, 2, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 1, 2, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -455,9 +500,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 branca
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 1, 2, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 1, 2, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -465,9 +510,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 vermelha
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 1, 2, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 1, 2, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -475,9 +520,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 amarela
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 1, 2, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 1, 2, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -485,9 +530,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 verde
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 1, 2, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 1, 2, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -495,9 +540,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=100 && y<=128 && seguraPeca==0){
 //adicionar peça 1x2 azul
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 2, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 1, 2, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 1, 2, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-0.5)*2); //blocotipo1
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -509,9 +554,9 @@ static void rato(int botao, int estado, int x, int y){
 //
     else if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 preta
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 2, 4, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 2, 4, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -519,9 +564,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 branca
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 2, 4, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 2, 4, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -529,9 +574,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 vermelha
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 2, 4, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 2, 4, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -539,9 +584,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 amarela
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 2, 4, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 2, 4, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -549,9 +594,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 verde
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 2, 4, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 2, 4, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -559,9 +604,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=142 && y<=180 && seguraPeca==0){
 //adicionar peça 1x4 azul
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 4, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 2, 4, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 2, 4, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-1.5)*2); //blocotipo2
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -573,9 +618,9 @@ static void rato(int botao, int estado, int x, int y){
 //
     else if(estado==GLUT_DOWN && x>=608 && x<=635 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 preta
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 3, 8, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 0, 3, 8, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -583,9 +628,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=642 && x<=670 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 branca
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 3, 8, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 1, 3, 8, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -593,9 +638,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=673 && x<=700 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 vermelha
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 3, 8, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 2, 3, 8, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -603,9 +648,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=703 && x<=730 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 amarela
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 3, 8, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 3, 3, 8, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -613,9 +658,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=734 && x<=763 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 verde
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 3, 8, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 4, 3, 8, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -623,9 +668,9 @@ static void rato(int botao, int estado, int x, int y){
 	}
     } else if(estado==GLUT_DOWN && x>=767 && x<=800 && y>=190 && y<=242 && seguraPeca==0){
 //adicionar peça 1x8 azul
-	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8) == 0) { 
+	if(verificaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0) == 0) { 
 	    ocupaPosMatriz(&cursor, posCursor[0], posCursor[1], posCursor[2], 8, 0, pecasadd);
-	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 3, 8, 1);
+	    MinhasPecas[pecasadd]=novaPeca(pecasadd, 5, 3, 8, 1, 0);
             MinhasPecas[pecasadd]=alteraTransladoPeca((posCursor[0])*2, (posCursor[1]+0.25)*2, (posCursor[2]-3.5)*2); //blocotipo3
 	    pecasadd++;
 	    cursor.pecaSel=999; //modo nova peca
@@ -1031,59 +1076,59 @@ void logicaJogo(){
 void carregaMatrizPecas(){
     for(int i=0; i<60; i++){ //carrega pecas do tipo 1x1 da matriz de pecas
 	if(i<10) //pretas
-	MinhasPecas[i]=novaPeca(i, 0, 0, 1, 0);
+	MinhasPecas[i]=novaPeca(i, 0, 0, 1, 0, 0);
 	else if(i>=10 && i<20) //brancas
-	MinhasPecas[i]=novaPeca(i, 1, 0, 1, 0);
+	MinhasPecas[i]=novaPeca(i, 1, 0, 1, 0, 0);
 	else if(i>=20 && i<30) //vermelhas
-	MinhasPecas[i]=novaPeca(i, 2, 0, 1, 0);
+	MinhasPecas[i]=novaPeca(i, 2, 0, 1, 0, 0);
 	else if(i>=30 && i<40) //amarelas
-	MinhasPecas[i]=novaPeca(i, 3, 0, 1, 0);
+	MinhasPecas[i]=novaPeca(i, 3, 0, 1, 0, 0);
 	else if(i>=40 && i<50) //verdes
-	MinhasPecas[i]=novaPeca(i, 4, 0, 1, 0);
+	MinhasPecas[i]=novaPeca(i, 4, 0, 1, 0, 0);
 	else if(i>=50 && i<60) //azuis
-	MinhasPecas[i]=novaPeca(i, 5, 0, 1, 0);
+	MinhasPecas[i]=novaPeca(i, 5, 0, 1, 0, 0);
     }
     for(int i=60; i<120; i++){ //carrega pecas do tipo 1x2 da matriz de pecas
 	if(i<70) //pretas
-	MinhasPecas[i]=novaPeca(i, 0, 1, 2, 0);
+	MinhasPecas[i]=novaPeca(i, 0, 1, 2, 0, 0);
 	else if(i>=70 && i<80) //brancas
-	MinhasPecas[i]=novaPeca(i, 1, 1, 2, 0);
+	MinhasPecas[i]=novaPeca(i, 1, 1, 2, 0, 0);
 	else if(i>=80 && i<90) //vermelhas
-	MinhasPecas[i]=novaPeca(i, 2, 1, 2, 0);
+	MinhasPecas[i]=novaPeca(i, 2, 1, 2, 0, 0);
 	else if(i>=90 && i<100) //amarelas
-	MinhasPecas[i]=novaPeca(i, 3, 1, 2, 0);
+	MinhasPecas[i]=novaPeca(i, 3, 1, 2, 0, 0);
 	else if(i>=100 && i<110) //verdes
-	MinhasPecas[i]=novaPeca(i, 4, 1, 2, 0);
+	MinhasPecas[i]=novaPeca(i, 4, 1, 2, 0, 0);
 	else if(i>=110 && i<120) //azuis
-	MinhasPecas[i]=novaPeca(i, 5, 1, 2, 0);
+	MinhasPecas[i]=novaPeca(i, 5, 1, 2, 0, 0);
     }
     for(int i=120; i<180; i++){ //carrega pecas do tipo 1x4 da matriz de pecas
 	if(i<130) //pretas
-	MinhasPecas[i]=novaPeca(i, 0, 2, 4, 0);
+	MinhasPecas[i]=novaPeca(i, 0, 2, 4, 0, 0);
 	else if(i>=130 && i<140) //brancas
-	MinhasPecas[i]=novaPeca(i, 1, 2, 4, 0);
+	MinhasPecas[i]=novaPeca(i, 1, 2, 4, 0, 0);
 	else if(i>=140 && i<150) //vermelhas
-	MinhasPecas[i]=novaPeca(i, 2, 2, 4, 0);
+	MinhasPecas[i]=novaPeca(i, 2, 2, 4, 0, 0);
 	else if(i>=150 && i<160) //amarelas
-	MinhasPecas[i]=novaPeca(i, 3, 2, 4, 0);
+	MinhasPecas[i]=novaPeca(i, 3, 2, 4, 0, 0);
 	else if(i>=160 && i<170) //verdes
-	MinhasPecas[i]=novaPeca(i, 4, 2, 4, 0);
+	MinhasPecas[i]=novaPeca(i, 4, 2, 4, 0, 0);
 	else if(i>=170 && i<180) //azuis
-	MinhasPecas[i]=novaPeca(i, 5, 2, 4, 0);
+	MinhasPecas[i]=novaPeca(i, 5, 2, 4, 0, 0);
     }
     for(int i=180; i<240; i++){ //carrega pecas do tipo 1x8 da matriz de pecas
 	if(i<190) //pretas
-	MinhasPecas[i]=novaPeca(i, 0, 3, 8, 0);
+	MinhasPecas[i]=novaPeca(i, 0, 3, 8, 0, 0);
 	else if(i>=190 && i<200) //brancas
-	MinhasPecas[i]=novaPeca(i, 1, 3, 8, 0);
+	MinhasPecas[i]=novaPeca(i, 1, 3, 8, 0, 0);
 	else if(i>=200 && i<210) //vermelhas
-	MinhasPecas[i]=novaPeca(i, 2, 3, 8, 0);
+	MinhasPecas[i]=novaPeca(i, 2, 3, 8, 0, 0);
 	else if(i>=210 && i<220) //amarelas
-	MinhasPecas[i]=novaPeca(i, 3, 3, 8, 0);
+	MinhasPecas[i]=novaPeca(i, 3, 3, 8, 0, 0);
 	else if(i>=220 && i<230) //verdes
-	MinhasPecas[i]=novaPeca(i, 4, 3, 8, 0);
+	MinhasPecas[i]=novaPeca(i, 4, 3, 8, 0, 0);
 	else if(i>=230 && i<240) //azuis
-	MinhasPecas[i]=novaPeca(i, 5, 3, 8, 0);
+	MinhasPecas[i]=novaPeca(i, 5, 3, 8, 0, 0);
     }
 }
 

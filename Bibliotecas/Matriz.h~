@@ -95,10 +95,9 @@ void esvaziaPosPeca(MalhaAux *Malha, int pecaId) {
 	        for(int k=0; k<8; k++) {
 	                for(int l=0; l<8; l++) {
 			    if(p->M[j][k][l][2] == pecaId && p->M[j][k][l][0] == 1) {
-				p->M[j][k][l][0] == 0;
-				p->M[j][k][l][1] == 0;
-				p->M[j][k][l][2] == 0;
-				printf("\n\n\nHey Du BÖSE!\n\n\n)");
+				p->M[j][k][l][0] = 0;
+				p->M[j][k][l][1] = 0;
+				p->M[j][k][l][2] = 0;
 			    }
 			}
 		}

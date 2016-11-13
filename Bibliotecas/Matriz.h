@@ -107,7 +107,7 @@ void esvaziaPosPeca(MalhaAux *Malha, int pecaId) {
 }
 
 int informaPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz) {
-    if(Ix > 7 || Iy > 7 || Iz > 7)
+    if(Ix > 7 || Iy > 7 || Iz > 7 || Ix < 0 || Iy < 0 || Iz < 0)
         return 0;    
 
     printf("\nPosicao retornada era %d!", p->M[Ix][Iy][Iz][0]);

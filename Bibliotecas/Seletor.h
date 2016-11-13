@@ -22,7 +22,7 @@ int moverSeta(SetinhaAux *, int, int, int);
 void selecionaPeca(SetinhaAux *, int , int , int );
 void moverPeca(SetinhaAux *, int , int , int );
 void deletarPeca(SetinhaAux *, int );
-int verificaPosMatriz(SetinhaAux *Setinha, int , int , int , int );
+int verificaPosMatriz(SetinhaAux *Setinha, int , int , int , int , int );
 void ocupaPosMatriz(SetinhaAux *Setinha, int , int , int , int , int , int );
 int identificaPecaPosicao(SetinhaAux *Setinha, int , int , int );
 
@@ -105,13 +105,23 @@ void deletarPeca(SetinhaAux *Setinha, int pecaId) {
     esvaziaPosPeca(&MatrizG, pecaId);
 }
 
-int verificaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam) {
+int verificaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int rotacionado) {
     int ocupacoes = 0;
-    for(int i = (Pz*-1); i < ((Pz*-1)+tam); i++){
-	//printf("\nPosicao (%d,%d,%d) = %d", Px, (Py*-1), i, informaPosicao(&MatrizG, Px, (Py*-1), i));
-        if(informaPosicao(&MatrizG, Px, (Py*-1), i) != 0)
-	    ocupacoes++;
+
+    if(rotacionado == 0) {
+        for(int i = (Pz*-1); i < ((Pz*-1)+tam); i++){
+	    //printf("\nPosicao (%d,%d,%d) = %d", Px, (Py*-1), i, informaPosicao(&MatrizG, Px, (Py*-1), i));
+            if(informaPosicao(&MatrizG, Px, (Py*-1), i) != 0)
+	        ocupacoes++;
+        }
+    } else if(rotacionado == 1) {
+	for(int i = Px; i > (Px-tam); i--){
+	    //printf("\nPosicao (%d,%d,%d) = %d", Px, (Py*-1), i, informaPosicao(&MatrizG, Px, (Py*-1), i));
+            if(informaPosicao(&MatrizG, i, (Py*-1), (Pz*-1)) != 0)
+	        ocupacoes++;
+        }
     }
+
     if(ocupacoes == 0)
         return 0;
     else

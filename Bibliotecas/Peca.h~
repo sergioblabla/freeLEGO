@@ -24,14 +24,14 @@ struct Pecinha {
     Objeto3D Obj;
 };
 
-PecinhaAux novaPeca(int , int , int , int , int );
+PecinhaAux novaPeca(int , int , int , int , int , int );
 PecinhaAux apagaPeca();
 void atualizaCorPeca(int );
 //void moverPeca(PecinhaAux *, int, int ,int);
 void alteraPosicao(PecinhaAux *, int , int , int );
 PecinhaAux alteraTransladoPeca(float , float , float );
 void pegaPosicao(PecinhaAux *, int *);
-void rotaciona(PecinhaAux *, int );
+PecinhaAux rotacionaPeca();
 int pegaTamanho(PecinhaAux *);
 void imprimirPeca(PecinhaAux );
 
@@ -42,14 +42,14 @@ void imprimirPeca(PecinhaAux );
               size: comprimento da peca
               */
 
-PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe) {
+PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe, int rotaciona) {
      //variavel auxiliar alocada
      struct Pecinha * auxiliarPeca = 0;
      auxiliarPeca = (struct Pecinha *) malloc (sizeof(struct Pecinha));
      //if(!auxiliarPeca) return false;
      
     auxiliarPeca->identificador = nome;
-    auxiliarPeca->rotacionada = 0;
+    auxiliarPeca->rotacionada = rotaciona;
     auxiliarPeca->posmx = 0;
     auxiliarPeca->posmy = 0;
     auxiliarPeca->posmz = 0;
@@ -79,8 +79,8 @@ PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe) {
                       carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x8.obj");
 			printf("\nBloco tipo 3 carregado com sucesso");
                       break;
-                 }
-    auxiliarPeca->Obj = Bloco;
+             }
+        auxiliarPeca->Obj = Bloco;
     } else {
     carregar(&Bloco, "Bibliotecas/Objetos/lixo.obj");
     auxiliarPeca->Obj = Bloco;
@@ -206,8 +206,24 @@ void pegaPosicaoPeca(PecinhaAux *Pecinha, int *ArrAux) {
     ArrAux[2] = pe->posmz;
 }
 
-void rotacionaPeca(PecinhaAux *Pecinha, int roda) {
-    pe->cor=3;
+PecinhaAux rotacionaPeca() {
+    float transxAux = pe->transx, 
+		transyAux = pe->transy, 
+		transzAux = pe->transz;
+    if(pe->rotacionada == 0) {
+	pe->rotacionada = 1;
+
+	pe->transx = transzAux;
+    	//pe->transy = -transzAux;
+    	pe->transz = transxAux;
+    } else if(pe->rotacionada == 1) {
+	pe->rotacionada = 0;
+
+	pe->transx = transzAux;
+    	//pe->transy = transyAux;
+    	pe->transz = transxAux;
+    }
+    /*pe->cor=3;
 
     glPushMatrix();	//empilha
                     //atualizaCorPeca();
@@ -224,7 +240,9 @@ void rotacionaPeca(PecinhaAux *Pecinha, int roda) {
 
     pe->rotacionada = roda;
     
-    printf("\nAlterada rotacao da peca com sucesso para: %d!", pe->rotacionada);
+    printf("\nAlterada rotacao da peca com sucesso para: %d!", pe->rotacionada);*/
+
+    return *pe;
 }
 
 int pegaComprimentoPeca(PecinhaAux *Pecinha) {
@@ -236,6 +254,15 @@ void imprimirPeca(PecinhaAux Pec){
     if(Pec.exibir==1)
     glPushMatrix();	//empilha
 	atualizaCorPeca(Pec.cor);
+	if(Pec.rotacionada == 1) {
+    	    glRotated(90, 0, 1, 0);
+
+    	    //glTranslatef(Pec.transz*1.75,0,Pec.transx);
+	}
+	/*else if(Pec.rotacionada == 2)
+	    glRotated(180, 0, 1, 0);
+	else if(Pec.rotacionada == 3)
+	    glRotated(270, 0, 1, 0);*/
 	glTranslatef(Pec.transx, Pec.transy, Pec.transz);
 	imprimir(Pec.Obj);
     glPopMatrix();	//empilha
