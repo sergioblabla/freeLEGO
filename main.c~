@@ -95,8 +95,8 @@ int girarPeca = -1;
 SetinhaAux cursor;
 
 //gerenciamento de janela
-int width=1600;
-int height=1000;
+int width=800;
+int height=500;
 
 //Cabeçalhos das funções:
 void key(unsigned char , int , int );
@@ -845,7 +845,7 @@ void Desenhar(){
 
 	// Capacidade de brilho do material
 	GLfloat especularidade[4]={1.0,1.0,1.0,1.0}; 
-	GLint especMaterial = 60;
+	GLint especMaterial = 20;
 
 	// Habilita o modelo de colorização de Gouraud
 	glShadeModel(GL_SMOOTH);
