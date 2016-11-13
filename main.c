@@ -942,7 +942,7 @@ void Desenhar(){
     		glPushMatrix();	//empilha
         		glColor3f(0.85,0.6,0);
         		glTranslatef(posCursor[0]*2, posCursor[1]*2, posCursor[2]*2);
-        		glRotated(a, 0, 1, 0);
+        		glRotated(2*a, 0, 1, 0);
 			imprimir(Seta);
     		glPopMatrix();	//desempilha
     		}

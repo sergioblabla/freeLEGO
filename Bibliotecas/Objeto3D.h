@@ -167,7 +167,7 @@ void imprimir(Objeto3D objeto3D) {
     while(q) {
         glTexCoord2f(0, 0);
 		/*auxNorma = calculaNorma(q->p1.x, q->p1.y, q->p1.z);
-		glNormal3f(q->p1.x/auxNorma, q->p1.y/auxNorma, q->p1.z/auxNorma); */
+		glNormal3f(q->p1.x/auxNorma, q->p1.y/auxNorma, q->p1.z/auxNorma);*/ 
 			glVertex3f(q->p1.x, q->p1.y, q->p1.z);
         glTexCoord2f(0, 1);
 		/*auxNorma = calculaNorma(q->p2.x, q->p2.y, q->p2.z);
@@ -179,7 +179,7 @@ void imprimir(Objeto3D objeto3D) {
 			glVertex3f(q->p3.x, q->p3.y, q->p3.z);
         glTexCoord2f(1, 0); 
 		/*auxNorma = calculaNorma(q->p4.x, q->p4.y, q->p4.z);
-		glNormal3f(q->p4.x/auxNorma, q->p4.y/auxNorma, q->p4.z/auxNorma); */
+		glNormal3f(q->p4.x/auxNorma, q->p4.y/auxNorma, q->p4.z/auxNorma);*/ 
 			glVertex3f(q->p4.x, q->p4.y, q->p4.z);
 
         q = q->prox;

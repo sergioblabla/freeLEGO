@@ -208,7 +208,7 @@ void pegaPosicaoPeca(PecinhaAux *Pecinha, int *ArrAux) {
     ArrAux[2] = pe->posmz;
 }
 
-PecinhaAux rotacionaPeca(PecinhaAux *balde, int pos, int rotaciona) {
+PecinhaAux rotacionaPeca(PecinhaAux *Pecinha, int rotaciona) {
 /*
     pe->rotacionada = rotaciona;
 
@@ -232,13 +232,13 @@ void imprimirPeca(PecinhaAux Pec){
     if(Pec.exibir==1)
     glPushMatrix();	//empilha
 	atualizaCorPeca(Pec.cor);
-	if(Pec.rotacionada == 1) {
+	/*if(Pec.rotacionada == 1) {
 	    glTranslatef(0, 0, 0);
     	    glRotated(90, 0, 1, 0);
-	}
+	}*/
 
 	glTranslatef(Pec.transx, Pec.transy, Pec.transz);
-	imprimir(Pec.Obj);
+	imprimir(Pec.Obj, Pec.rotacionada);
     glPopMatrix();	//empilha
 }
 

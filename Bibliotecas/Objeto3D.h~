@@ -33,13 +33,12 @@ struct objeto3D {
 };
 
 float calculaNorma(float x, float y, float z);
-float *produtoVetorialVetores(float *v, float *u, int n);
 void carregar(Objeto3D *,char *);
 void imprimir(Objeto3D);
 void inserir_faceT(FaceT **, Ponto, Ponto, Ponto);
 void inserir_faceQ(FaceQ **, Ponto, Ponto, Ponto, Ponto);
 
-/* Calcula a norma de um vetor a partir de 3 coordenadas */
+/* Calcula a norma de um vetor a partir de 3 coordenadas*/
 float calculaNorma(float x, float y, float z)
 {
     int i;
@@ -47,25 +46,6 @@ float calculaNorma(float x, float y, float z)
     norma = x*x + y*y + z*z;
 
    return sqrt(norma);
-}
-
-/* Calcula o produto vetorial entre dois vetores de dimensão 3 */
-float *produtoVetorialVetores(float *v, float *u, int n){
-    int a;
-    float *resultado;
-
-    if(n != 3)
-        return resultado;
-
-    resultado = (float *) calloc((n), sizeof(float));
-    for(int i = 0; i < n; i++)
-	resultado[i] = 0;
-
-    resultado[0] = v[1]*u[2] - v[2]*u[1];
-    resultado[1] = v[2]*u[0] - v[0]*u[2];
-    resultado[2] = v[0]*u[1] - v[1]*u[0];
-
-    return resultado;
 }
 
 /* Preenche as informações de um Objeto3D com os dados presentes no arquivo */
@@ -169,25 +149,15 @@ void imprimir(Objeto3D objeto3D) {
 
     glBegin(GL_TRIANGLES);
     while(t) {
-	/*auxNorma = calculaNorma(t->p1.x, t->p1.y, t->p1.z);
-		glNormal3f(t->p1.x/auxNorma, t->p1.y/auxNorma, t->p1.z/auxNorma); */
+	auxNorma = calculaNorma(t->p1.x, t->p1.y, t->p1.z);
+		glNormal3f(t->p1.x/auxNorma, t->p1.y/auxNorma, t->p1.z/auxNorma); 
         		glVertex3f(t->p1.x, t->p1.y, t->p1.z);
-	/*auxNorma = calculaNorma(t->p2.x, t->p2.y, t->p2.z);
-		glNormal3f(t->p2.x/auxNorma, t->p2.y/auxNorma, t->p2.z/auxNorma); */
+	auxNorma = calculaNorma(t->p2.x, t->p2.y, t->p2.z);
+		glNormal3f(t->p2.x/auxNorma, t->p2.y/auxNorma, t->p2.z/auxNorma); 
         		glVertex3f(t->p2.x, t->p2.y, t->p2.z);
-	/*auxNorma = calculaNorma(t->p3.x, t->p3.y, t->p3.z);
-		glNormal3f(t->p3.x/auxNorma, t->p3.y/auxNorma, t->p3.z/auxNorma); */
+	auxNorma = calculaNorma(t->p3.x, t->p3.y, t->p3.z);
+		glNormal3f(t->p3.x/auxNorma, t->p3.y/auxNorma, t->p3.z/auxNorma); 
         		glVertex3f(t->p3.x, t->p3.y, t->p3.z);
-
-	float u[4] = {t->p2.x - t->p1.x, 
-			t->p2.y - t->p1.y,
-			t->p2.z - t->p1.z};
-	float v[4] = {t->p3.x - t->p1.x, 
-			t->p3.y - t->p1.y,
-			t->p3.z - t->p1.z};
-	float *crossVector = produtoVetorialVetores(u, v, 3);
-	auxNorma = calculaNorma(crossVector[0], crossVector[1], crossVector[2]);
-	glNormal3f(crossVector[0]/auxNorma, crossVector[1]/auxNorma, crossVector[2]/auxNorma);
 
         t = t->prox;
     }
@@ -197,7 +167,7 @@ void imprimir(Objeto3D objeto3D) {
     while(q) {
         glTexCoord2f(0, 0);
 		/*auxNorma = calculaNorma(q->p1.x, q->p1.y, q->p1.z);
-		glNormal3f(q->p1.x/auxNorma, q->p1.y/auxNorma, q->p1.z/auxNorma); */
+		glNormal3f(q->p1.x/auxNorma, q->p1.y/auxNorma, q->p1.z/auxNorma);*/ 
 			glVertex3f(q->p1.x, q->p1.y, q->p1.z);
         glTexCoord2f(0, 1);
 		/*auxNorma = calculaNorma(q->p2.x, q->p2.y, q->p2.z);
@@ -209,8 +179,9 @@ void imprimir(Objeto3D objeto3D) {
 			glVertex3f(q->p3.x, q->p3.y, q->p3.z);
         glTexCoord2f(1, 0); 
 		/*auxNorma = calculaNorma(q->p4.x, q->p4.y, q->p4.z);
-		glNormal3f(q->p4.x/auxNorma, q->p4.y/auxNorma, q->p4.z/auxNorma); */
+		glNormal3f(q->p4.x/auxNorma, q->p4.y/auxNorma, q->p4.z/auxNorma);*/ 
 			glVertex3f(q->p4.x, q->p4.y, q->p4.z);
+
         q = q->prox;
     }
     glEnd();

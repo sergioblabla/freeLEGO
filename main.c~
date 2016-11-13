@@ -95,8 +95,8 @@ int girarPeca = -1;
 SetinhaAux cursor;
 
 //gerenciamento de janela
-int width=800;
-int height=500;
+int width=1600;
+int height=1000;
 
 //Cabeçalhos das funções:
 void key(unsigned char , int , int );
@@ -942,7 +942,7 @@ void Desenhar(){
     		glPushMatrix();	//empilha
         		glColor3f(0.85,0.6,0);
         		glTranslatef(posCursor[0]*2, posCursor[1]*2, posCursor[2]*2);
-        		glRotated(a, 0, 1, 0);
+        		glRotated(2*a, 0, 1, 0);
 			imprimir(Seta);
     		glPopMatrix();	//desempilha
     		}
@@ -950,6 +950,8 @@ void Desenhar(){
     }
 
     /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
+
+    glDisable(GL_TEXTURE_2D);			// Enable Texture Mapping
 
     GerenciaPecas();
 
