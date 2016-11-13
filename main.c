@@ -951,6 +951,8 @@ void Desenhar(){
 
     /* FIM DO CURSOR DE SELECAO DE PECAS NA MATRIZ NA PEÇAS */
 
+    glDisable(GL_TEXTURE_2D);			// Enable Texture Mapping
+
     GerenciaPecas();
 
     jogocomecou=jogocomecou+1;

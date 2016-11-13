@@ -344,7 +344,7 @@ void key(unsigned char key, int x, int y)
 			if(verificaPosMatriz(&cursor, posCursor[0]+1, posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp-1, 0) == 0) { 
 			    printf("\n\nOHO\n\n");
 
-			    MinhasPecas[girarPeca] = rotacionaPeca(0);
+			    MinhasPecas[girarPeca] = rotacionaPeca(&MinhasPecas[girarPeca], 0);
 
 			    switch(MinhasPecas[girarPeca].tamp) {
 			    	case 2:
@@ -368,7 +368,7 @@ void key(unsigned char key, int x, int y)
 			if(verificaPosMatriz(&cursor, posCursor[0]-1, posCursor[1], posCursor[2], MinhasPecas[girarPeca].tamp-1, 1) == 0) { 
 			    printf("\n\nYEY\n\n");
 
-			    MinhasPecas[girarPeca] = rotacionaPeca(1);
+			    MinhasPecas[girarPeca] = rotacionaPeca(&MinhasPecas[girarPeca], 1);
 
 			    switch(MinhasPecas[girarPeca].tamp) {
 			    	case 2:
