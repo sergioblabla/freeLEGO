@@ -31,7 +31,7 @@ void atualizaCorPeca(int );
 void alteraPosicao(PecinhaAux *, int , int , int );
 PecinhaAux alteraTransladoPeca(float , float , float );
 void pegaPosicao(PecinhaAux *, int *);
-PecinhaAux rotacionaPeca();
+PecinhaAux rotacionaPeca(int );
 int pegaTamanho(PecinhaAux *);
 void imprimirPeca(PecinhaAux );
 
@@ -60,6 +60,8 @@ PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe, int rota
     auxiliarPeca->transy = 0;
     auxiliarPeca->transz = 0;
     auxiliarPeca->exibir = exibe;
+
+			//printf("\nAuxCor=%d, AuxTipo=%d, AuxTamp=%d, AuxExibir=%d)\n", color, type, size, exibe, rotaciona);
 
     if(exibe==1){
     switch(type){ //carrega o objeto correto de acordo com o tipo
@@ -206,41 +208,9 @@ void pegaPosicaoPeca(PecinhaAux *Pecinha, int *ArrAux) {
     ArrAux[2] = pe->posmz;
 }
 
-PecinhaAux rotacionaPeca() {
-    float transxAux = pe->transx, 
-		transyAux = pe->transy, 
-		transzAux = pe->transz;
-    if(pe->rotacionada == 0) {
-	pe->rotacionada = 1;
+PecinhaAux rotacionaPeca(int rotaciona) {
 
-	/*pe->transx = transzAux;
-    	pe->transy = -transzAux;
-    	pe->transz = transxAux;*/
-    } else if(pe->rotacionada == 1) {
-	pe->rotacionada = 0;
-
-	/*pe->transx = transzAux;
-    	pe->transy = transyAux;
-    	pe->transz = transxAux;*/
-    }
-    /*pe->cor=3;
-
-    glPushMatrix();	//empilha
-                    //atualizaCorPeca();
-                    
-    if(pe->rotacionada==0)
-    glRotated(-90, 1, 0, 0);
-    else if(pe->rotacionada==1)
-    glRotated(90, 1, 0, 0);
-
-    glTranslated(10,50,90);
-
-    glPopMatrix();
-    glutPostRedisplay();
-
-    pe->rotacionada = roda;
-    
-    printf("\nAlterada rotacao da peca com sucesso para: %d!", pe->rotacionada);*/
+    pe->rotacionada = rotaciona;
 
     return *pe;
 }
@@ -255,14 +225,10 @@ void imprimirPeca(PecinhaAux Pec){
     glPushMatrix();	//empilha
 	atualizaCorPeca(Pec.cor);
 	if(Pec.rotacionada == 1) {
+	    glTranslatef(0, 0, 0);
     	    glRotated(90, 0, 1, 0);
-
-    	    //glTranslatef(Pec.transz*1.75,0,Pec.transx);
 	}
-	/*else if(Pec.rotacionada == 2)
-	    glRotated(180, 0, 1, 0);
-	else if(Pec.rotacionada == 3)
-	    glRotated(270, 0, 1, 0);*/
+
 	glTranslatef(Pec.transx, Pec.transy, Pec.transz);
 	imprimir(Pec.Obj);
     glPopMatrix();	//empilha

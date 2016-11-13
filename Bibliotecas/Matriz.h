@@ -63,13 +63,13 @@ void ocuparPosicao(MalhaAux *Malha, int Ix, int Iy, int Iz, int tam, int rotacio
     //verificaExistenciaPeca();//informaPosicao()==0
     if((Ix+tam<=50) && (rotacionado==1)) {
         for(i=Ix; i>(Ix-tam); i--) {
-	    if(i > 0 && Iy < 8 && Iz < 8) {
+	    if(i >= 0 && Iy < 8 && Iz < 8) {
 	        p->M[i][Iy][Iz][0] = 1; 		// ocupa determinadas posicoes da malha indicando que ali existe uma peca
 		p->M[i][Iy][Iz][1] = rotacionado;	// indica se a peca esta rotacionada
 		p->M[i][Iy][Iz][2] = pecaId;		// indentificador da peca
 	    }
 
-	//printf("\nPosicao (%d,%d,%d) = %d", i, Iy, Iz, p->M[i][Iy][Iz][0]);
+	printf("\nPosicao (%d,%d,%d) = %d", i, Iy, Iz, p->M[i][Iy][Iz][0]);
 	}
     } else if((Iz+tam<=50) && (rotacionado==0)) {
         for(i=Iz; i<(Iz+tam); i++) {
