@@ -27,7 +27,6 @@ struct Pecinha {
 PecinhaAux novaPeca(int , int , int , int , int , int );
 PecinhaAux apagaPeca();
 void atualizaCorPeca(int );
-//void moverPeca(PecinhaAux *, int, int ,int);
 void alteraPosicao(PecinhaAux *, int , int , int );
 PecinhaAux alteraTransladoPeca(float , float , float );
 void pegaPosicao(PecinhaAux *, int *);
@@ -36,17 +35,17 @@ int pegaTamanho(PecinhaAux *);
 void imprimirPeca(PecinhaAux );
 
 /*informacoes do inicializador da Peca:
-              nome: é sempre dado em int, pois será sempre um número para facilitar o acesso depois
-              color: é a cor, zero para preto, 1 para branco, 2 para vermelho, 3 para amarelo, 4 para verde, 5 para azul
-              type: é o tipo da peca, peca pequena, grande... 0 para 1x1, 1 para 1x2, 2 para 1x4, 3 para 1x8
-              size: comprimento da peca
-              */
+    nome: é sempre dado em int, pois será sempre um número para facilitar o acesso depois
+    color: é a cor, zero para preto, 1 para branco, 2 para vermelho, 3 para amarelo, 4 para verde, 5 para azul
+    type: é o tipo da peca, peca pequena, grande... 0 para 1x1, 1 para 1x2, 2 para 1x4, 3 para 1x8
+    size: comprimento da peca
+*/
 
 PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe, int rotaciona) {
-     //variavel auxiliar alocada
-     struct Pecinha * auxiliarPeca = 0;
-     auxiliarPeca = (struct Pecinha *) malloc (sizeof(struct Pecinha));
-     //if(!auxiliarPeca) return false;
+    //variavel auxiliar alocada
+    struct Pecinha * auxiliarPeca = 0;
+    auxiliarPeca = (struct Pecinha *) malloc (sizeof(struct Pecinha));
+    //if(!auxiliarPeca) return false;
      
     auxiliarPeca->identificador = nome;
     auxiliarPeca->rotacionada = rotaciona;
@@ -61,57 +60,34 @@ PecinhaAux novaPeca(int nome, int color, int type, int size, int exibe, int rota
     auxiliarPeca->transz = 0;
     auxiliarPeca->exibir = exibe;
 
-			//printf("\nAuxCor=%d, AuxTipo=%d, AuxTamp=%d, AuxExibir=%d)\n", color, type, size, exibe, rotaciona);
-
     if(exibe==1){
-    switch(type){ //carrega o objeto correto de acordo com o tipo
-                 case 0:
-                      carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x1.obj");
-			printf("\nBloco tipo 0 carregado com sucesso");
-                      break;
-                 case 1:
-                      carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x2.obj");
-			printf("\nBloco tipo 1 carregado com sucesso");
-                      break;
-                 case 2:
-                      carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x4.obj");
-			printf("\nBloco tipo 2 carregado com sucesso");
-                      break;
-                 case 3:
-                      carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x8.obj");
-			printf("\nBloco tipo 3 carregado com sucesso");
-                      break;
-             }
-        auxiliarPeca->Obj = Bloco;
-    } else {
-    carregar(&Bloco, "Bibliotecas/Objetos/lixo.obj");
-    auxiliarPeca->Obj = Bloco;
+	    switch(type){ //carrega o objeto correto de acordo com o tipo
+	    	case 0:
+				carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x1.obj");
+				printf("\nBloco tipo 0 carregado com sucesso");
+			break;
+			case 1:
+				carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x2.obj");
+				printf("\nBloco tipo 1 carregado com sucesso");
+			break;
+			case 2:
+				carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x4.obj");
+				printf("\nBloco tipo 2 carregado com sucesso");
+			break;
+			case 3:
+				carregar(&Bloco, "Bibliotecas/Objetos/pecinha1x8.obj");
+				printf("\nBloco tipo 3 carregado com sucesso");
+			break;
+		}
+	    auxiliarPeca->Obj = Bloco;
+    }
+    else {
+	    carregar(&Bloco, "Bibliotecas/Objetos/lixo.obj");
+	    auxiliarPeca->Obj = Bloco;
     }
 
     pe = auxiliarPeca;
-return *pe;
-    
-    //Obj = &Bloco;
-                 
-    /*glPushMatrix();	//empilha
-                    atualizaCorPeca();
-		    glScaled(100,100,100);
-                    glTranslatef(pe->transx, pe->transy, pe->transz);
-                    imprimir(Bloco);
-    glutPostRedisplay();
-    glPopMatrix();	//empilha*/
-    
-    /*printf("\nIdentificador nome retornado eh %d!", pe->identificador);
-    printf("\nIdentificador rotacionada retornado eh %d!", pe->rotacionada);
-    printf("\nIdentificador posicaox retornado eh %d!", pe->posmx);
-    printf("\nIdentificador posicaoy retornado eh %d!", pe->posmy);
-    printf("\nIdentificador posicaoz retornado eh %d!", pe->posmz);
-    printf("\nIdentificador cor retornado eh %d!", pe->cor);
-    printf("\nIdentificador tipo retornado eh %d!", pe->tipo);
-    printf("\nIdentificador comprimento retornado eh %d!", pe->tamp);
-    printf("\nIdentificador transx retornado eh %d!", pe->transx);
-    printf("\nIdentificador transy retornado eh %d!", pe->transy);
-    printf("\nIdentificador transz retornado eh %d!", pe->transz);*/
+	return *pe;
 }
 
 PecinhaAux apagaPeca(){
@@ -142,41 +118,27 @@ PecinhaAux apagaPeca(){
 }
 
 void atualizaCorPeca(int par){
-     switch(par){
-                  case 0:
-                       glColor3f(0.04f,0.01f,0.0f);
-                       break;
-                  case 1:
-                       glColor3f(0.92f,0.9f,0.69f);
-                       break;
-                  case 2:
-                       glColor3f(0.77f,0.01f,0.0f);
-                       break;
-                  case 3:
-                       glColor3f(0.73f,0.52f,0.06f);
-                       break;
-                  case 4:
-                       glColor3f(0.0f,0.1f,0.01f);
-                       break;
-                  case 5:
-                       glColor3f(0.0f,0.0f,0.48f);
-                       break;
-                       }
+	switch(par){
+		case 0:
+			glColor3f(0.04f,0.01f,0.0f);
+		break;
+		case 1:
+			glColor3f(0.92f,0.9f,0.69f);
+		break;
+		case 2:
+			glColor3f(0.77f,0.01f,0.0f);
+		break;
+		case 3:
+			glColor3f(0.73f,0.52f,0.06f);
+		break;
+		case 4:
+			glColor3f(0.0f,0.1f,0.01f);
+		break;
+		case 5:
+			glColor3f(0.0f,0.0f,0.48f);
+		break;
+	}
 }
-
-/*void moverPeca(PecinhaAux *Pecinha, int x, int y, int z){
-     //variavel auxiliar alocada
-     struct Pecinha * auxiliarPeca = 0;
-     auxiliarPeca = (struct Pecinha *) malloc (sizeof(struct Pecinha));
-     if(!auxiliarPeca) return;
-
-     auxiliarPeca=Pecinha;
-     alteraPosicaoMPeca(&auxiliarPeca, x, y, z);
-     int tx=9;
-     int ty=8;
-     int tz=7;
-     alteraTransladoPeca(&auxiliarPeca, tx, ty, tz);
-}*/
 
 void alteraPosicaoMPeca(PecinhaAux *Pecinha, int posmxAux, int posmyAux, int posmzAux) {
     pe->posmx = posmxAux;
@@ -209,17 +171,9 @@ void pegaPosicaoPeca(PecinhaAux *Pecinha, int *ArrAux) {
 }
 
 PecinhaAux rotacionaPeca(PecinhaAux *Pecinha, int rotaciona) {
-/*
-    pe->rotacionada = rotaciona;
-
-    return *pe;*/
-
     struct Pecinha * auxiliarPeca = Pecinha;
-
     auxiliarPeca->rotacionada = rotaciona;
-
     pe = auxiliarPeca;
-
     return *pe;
 }
 
@@ -234,7 +188,7 @@ void imprimirPeca(PecinhaAux Pec){
 	atualizaCorPeca(Pec.cor);
 	if(Pec.rotacionada == 1) {
 	    glTranslatef(0, 0, 0);
-    	    glRotated(90, 0, 1, 0);
+    	glRotated(90, 0, 1, 0);
 	}
 
 	glTranslatef(Pec.transx, Pec.transy, Pec.transz);

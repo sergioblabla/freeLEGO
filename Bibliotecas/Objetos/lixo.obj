@@ -3,7 +3,8 @@
 mtllib lixo.mtl
 o Cube
 v 0 0 0
+vn 0 0 0
 usemtl Material
 s off
-f 1 0 0
+f 1//1 0//1 0//1
 

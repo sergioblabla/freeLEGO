@@ -28,77 +28,58 @@ int identificaPecaPosicao(SetinhaAux *Setinha, int , int , int );
 
 void iniciarCursor(SetinhaAux *Setinha) {
      //variavel auxiliar alocada
-     struct Setinha * auxiliarCursor = 0;
-     auxiliarCursor = (struct Setinha *) malloc (sizeof(struct Setinha));
-     if(!auxiliarCursor) return;
-     
-     auxiliarCursor->x=0;
-     auxiliarCursor->y=0;
-     auxiliarCursor->z=0;
-     //seletor iniciado, posicao (zero, zero, zero) estabelecida
-     auxiliarCursor->pecaSel=0; //peca padrao iniciada como nenhuma
-    
-    s=auxiliarCursor;
-    iniciarMalha(&MatrizG);
+	struct Setinha * auxiliarCursor = 0;
+	auxiliarCursor = (struct Setinha *) malloc (sizeof(struct Setinha));
+	if(!auxiliarCursor) return;
+
+	auxiliarCursor->x=0;
+	auxiliarCursor->y=0;
+	auxiliarCursor->z=0;
+	//seletor iniciado, posicao (zero, zero, zero) estabelecida
+	auxiliarCursor->pecaSel=0; //peca padrao iniciada como nenhuma
+
+	s=auxiliarCursor;
+	iniciarMalha(&MatrizG);
 }
 
 int moverSeta(SetinhaAux *Setinha, int Px, int Py, int Pz) {
-     if(Px<8&&Px>=0&&Py<=0&&Py>-8&&Pz<=0&&Pz>-8){ //predetermina posicao maxima para cursor, evitando que "fuja da tela" ou "suma"
-     /*//variavel auxiliar alocada
-     struct Setinha * auxiliarCursor = 0;
-     auxiliarCursor = (struct Setinha *) malloc (sizeof(struct Setinha));
-     if(!auxiliarCursor) return;*/
-     
-    /*auxiliarCursor->x = Px;
-    auxiliarCursor->y = Py;
-    auxiliarCursor->z = Pz; */
-    s->x = Px;
-    s->y = Py;
-    s->z = Pz;
-    //estabelece nova posicao para o seletor
-    //s=auxiliarCursor;
-    
-    //printf("\nMoveu cursor corretamente para a posicao %d, %d, %d com; sucesso", Px, Py*-1, Pz*-1);
-    return 1;
-    } else {
-    printf("\nNao foi possivel mover o cursor, pois esta fugindo da tela");
-    return 0;
+	if(Px<8&&Px>=0&&Py<=0&&Py>-8&&Pz<=0&&Pz>-8){ //predetermina posicao maxima para cursor, evitando que "fuja da tela" ou "suma"
+		s->x = Px;
+    	s->y = Py;
+    	s->z = Pz;
+    	return 1;
+    } 
+    else {
+	    printf("\nNao foi possivel mover o cursor, pois esta fugindo da tela");
+	    return 0;
     }
-    printf("\nWhatTheShit Happened?");
-    return 0;
 }
 
 void selecionaPeca(SetinhaAux *Setinha, int Px, int Py, int Pz) {
-     /*//variavel auxiliar alocada
-     struct Setinha * auxiliarCursor = 0;
-     auxiliarCursor = (struct Setinha *) malloc (sizeof(struct Setinha));
-     if(!auxiliarCursor) return;*/
-     
-    if(Px<8&&Px>=0&&Py<=0&&Py>-8&&Pz<=0&&Pz>-8){
-    if(informaPosicao(&MatrizG, Px, (Py*-1), (Pz*-1))==0){
-	s->pecaSel = identificaPecaPos(&MatrizG, Px, (Py*-1), (Pz*-1));
-	printf("\nEntrou no seleciona peca");
-	}
-    else{
-    	s->pecaSel = 0;
-	printf("\nNão existe peca na posicao selecionada");
-	}
-    } else ("\nVoce esta fora das dimensoes do espaco 8x8x8 de montagem e presenca de pecas!");
+	if(Px<8&&Px>=0&&Py<=0&&Py>-8&&Pz<=0&&Pz>-8){
+	    if(informaPosicao(&MatrizG, Px, (Py*-1), (Pz*-1))==0){
+			s->pecaSel = identificaPecaPos(&MatrizG, Px, (Py*-1), (Pz*-1));
+			printf("\nEntrou no seleciona peca");
+		}
+	    else{
+	    	s->pecaSel = 0;
+			printf("\nNão existe peca na posicao selecionada");
+		}
+    } 
+    else ("\nVoce esta fora das dimensoes do espaco 8x8x8 de montagem e presenca de pecas!");
     //o seletor reconhece a selecao de uma peca de determinada posicao
 }
 
 void moverPeca(SetinhaAux *Setinha, int Px, int Py, int Pz) {
-     //variavel auxiliar alocada
-     struct Setinha * auxiliarCursor = 0;
-     auxiliarCursor = (struct Setinha *) malloc (sizeof(struct Setinha));
-     if(!auxiliarCursor) return;
-     
-     auxiliarCursor = Setinha;
-     
-    if(auxiliarCursor->pecaSel==0)
+	//variavel auxiliar alocada
+	struct Setinha * auxiliarCursor = 0;
+	auxiliarCursor = (struct Setinha *) malloc (sizeof(struct Setinha));
+	if(!auxiliarCursor) return;
+
+	auxiliarCursor = Setinha;
+
+	if(auxiliarCursor->pecaSel==0)
 	printf("\n\n\n");
-	//GerenciadorMoverPeca(s->pecaSel, Px, Py, Pz);*/
-    //translada a peca para outra posicao atraves de outro arquivo, o gerenciador ou por aqui mesmo (não implementado)
 }
 
 void deletarPeca(SetinhaAux *Setinha, int pecaId) {
@@ -110,22 +91,22 @@ int verificaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int 
 
     if(rotacionado == 0) {
         for(int i = (Pz*-1); i < ((Pz*-1)+tam); i++){
-	    //printf("\nPosicao (%d,%d,%d) = %d", Px, (Py*-1), i, informaPosicao(&MatrizG, Px, (Py*-1), i));
             if(informaPosicao(&MatrizG, Px, (Py*-1), i) != 0)
 	        ocupacoes++;
         }
-    } else if(rotacionado == 1) {
-	for(int i = Px; i > (Px-tam); i--){
-	    //printf("\nPosicao (%d,%d,%d) = %d", Px, (Py*-1), i, informaPosicao(&MatrizG, Px, (Py*-1), i));
-            if(informaPosicao(&MatrizG, i, (Py*-1), (Pz*-1)) != 0)
-	        ocupacoes++;
-        }
     }
-
-    if(ocupacoes == 0)
+    else if(rotacionado == 1) {
+		for(int i = Px; i > (Px-tam); i--){
+	        if(informaPosicao(&MatrizG, i, (Py*-1), (Pz*-1)) != 0)
+		    ocupacoes++;
+	    }
+    }
+    if(ocupacoes == 0){
         return 0;
-    else
+    }
+    else{
         return 1;
+    }
 }
 
 void ocupaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int rotacionado, int pecaId) {
@@ -134,9 +115,7 @@ void ocupaPosMatriz(SetinhaAux *Setinha, int Px, int Py, int Pz, int tam, int ro
 
 int identificaPecaPosicao(SetinhaAux *Setinha, int Px, int Py, int Pz) {
     int pecaId = -1;
-
     pecaId = identificaPecaPos(&MatrizG, Px, (Py*-1), (Pz*-1));
-
     return pecaId;
 }
 
