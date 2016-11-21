@@ -296,7 +296,7 @@ void key(unsigned char key, int x, int y){
     *           Tela de Partida Pecinhas Operações            *
     ***********************************************************/
 		// Delete
-        case 13: { // remover pecinhas
+        case 127: { // remover pecinhas
 		    delPecaId = identificaPecaPosicao(&cursor, posCursor[0], posCursor[1], posCursor[2]);
 		    if(delPecaId != -1) {
 				deletarPeca(&cursor, delPecaId);
@@ -306,7 +306,7 @@ void key(unsigned char key, int x, int y){
         	break;
 		}
 		// Rodar Pecinha
-		case 131: {
+		case 13: {
 		    // Pega ID da pecinha naquela posicao
 		    girarPeca = identificaPecaPosicao(&cursor, posCursor[0], posCursor[1], posCursor[2]);
 		    
