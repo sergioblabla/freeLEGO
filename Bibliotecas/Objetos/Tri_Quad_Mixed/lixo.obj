@@ -1,9 +1,0 @@
-# Blender v2.62 (sub 0) OBJ File: 'lixo.blend'
-# www.blender.org
-mtllib lixo.mtl
-o Cube
-v 0 0 0
-usemtl Material
-s off
-f 1 0 0
-
